@@ -1,0 +1,5 @@
+---
+- name: Install Node on my account
+  hosts: myOccitech-Node
+  roles:
+    - role: hst-node
