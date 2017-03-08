@@ -1,0 +1,6 @@
+---
+- name: install Drush
+  get_url:
+    url: https://s3.amazonaws.com/files.drush.org/drush.phar
+    dest: ~/bin/drush
+    mode: 0555
