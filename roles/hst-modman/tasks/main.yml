@@ -1,0 +1,6 @@
+---
+- name: install modman
+  get_url:
+    url: https://raw.githubusercontent.com/colinmollenhour/modman/master/modman
+    dest: ~/bin/modman
+    mode: 0555
