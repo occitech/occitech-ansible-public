@@ -1,0 +1,26 @@
+---
+- name: install NodeEnv
+  git:
+    repo: https://github.com/OiNutter/nodenv.git
+    dest: ~/.nodenv
+
+- name: set NodeEnv local env variable
+  lineinfile:
+    create=yes
+    dest=~/.bash_profile
+    line="{{ item }}"
+  with_items:
+    - export PATH="$HOME/.nodenv/bin:$PATH"
+    - eval "$(nodenv init -)"
+
+- name: add node-build plugin to nodeenv
+  git:
+    repo: https://github.com/OiNutter/node-build.git
+    dest: ~/.nodenv/plugins/node-build
+
+- name: install and set nodejs {{ node_version }} as default version
+  command: chdir=~/ {{item}}
+  with_items:
+    - ~/.nodenv/bin/nodenv install -s {{ node_version }}
+    - ~/.nodenv/bin/nodenv rehash
+    - ~/.nodenv/bin/nodenv global {{ node_version }}
