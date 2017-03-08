@@ -1,3 +1,4 @@
 *.retry
 *.swp
 hosts
+playbook.yml
