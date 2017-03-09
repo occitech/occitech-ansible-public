@@ -1,0 +1,32 @@
+---
+- name: checkout rbenv source
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: ~/.rbenv
+
+- name: configure and make rbenv
+  command: chdir=~/.rbenv {{item}}
+  with_items:
+    - src/configure
+    - make -C src
+
+- name: set rbenv local env variable
+  lineinfile:
+    create=yes
+    dest=~/.bash_profile
+    line="{{ item }}"
+  with_items:
+    - export PATH="$HOME/.rbenv/bin:$PATH"
+    - eval "$(rbenv init -)"
+
+- name: checkout ruby-build plugin source
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: ~/.rbenv/plugins/ruby-build
+
+- name: install and set Ruby {{ ruby_version }} as default version
+  command: chdir=~/ {{item}}
+  with_items:
+    - ~/.rbenv/bin/rbenv install {{ ruby_version }}
+    - ~/.rbenv/bin/rbenv rehash
+    - ~/.rbenv/bin/rbenv global {{ ruby_version }}
