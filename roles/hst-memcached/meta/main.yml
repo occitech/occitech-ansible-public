@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: hst-bin }
+  - { role: hst-loopback }
