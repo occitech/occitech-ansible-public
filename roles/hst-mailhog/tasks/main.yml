@@ -5,10 +5,5 @@
     dest: ~/bin/mailhog
     mode: 0555
 
-- name: get authorized local interface from Apache config
-  shell: "cat admin/apache/apache.conf | grep ^Listen | awk -F ':| +' '/1/ {print $2}'"
-  register: mailhog_interface
-
 - name: deploy Mailhog cron
-  cron: name="{{ mailhog_hostname }} launch mailhog at reboot" special_time=reboot job="/home/{{ ansible_user }}/bin/mailhog -hostname {{ mailhog_hostname }} -smtp-bind-addr {{ mailhog_interface.stdout }}:{{ mailhog_smtp_sock }} -ui-bind-addr {{ mailhog_interface.stdout }}:{{ mailhog_ui_sock }} -api-bind-addr {{ mailhog_interface.stdout }}:{{ mailhog_api_sock }} > /dev/null 2>&1 &"
-  when: mailhog_interface.stdout != ''
+  cron: name="{{ mailhog_hostname }} launch mailhog at reboot" special_time=reboot job="/home/{{ ansible_user }}/bin/mailhog -hostname {{ mailhog_hostname }} -smtp-bind-addr {{ loopback_adress }}:{{ mailhog_smtp_sock }} -ui-bind-addr {{ loopback_adress }}:{{ mailhog_ui_sock }} -api-bind-addr {{ loopback_adress }}:{{ mailhog_api_sock }} > /dev/null 2>&1 &"
