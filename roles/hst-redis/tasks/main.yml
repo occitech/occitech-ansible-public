@@ -1,0 +1,18 @@
+---
+- name: ensure needed folders exist
+  file: path=~/redis/{{ item }} state=directory
+  with_items:
+    - log
+    - etc
+    - data
+
+- name: send Redis config
+  template:
+    src:  redis.conf.j2
+    dest: ~/redis/etc/redis.conf
+
+- name: install Redis PHP extension
+  command: ad_install_pecl redis
+
+- name: deploy Redis cron
+  cron: name="launch {{ redis_name }} at reboot" special_time=reboot job="/usr/bin/redis-server /home/{{ ansible_user }}/redis/etc/redis.conf "
