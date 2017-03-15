@@ -1,0 +1,6 @@
+---
+- name: set Python version
+  lineinfile:
+    create: yes
+    dest: ~/.bash_profile
+    line: export PYTHON_VERSION={{ python_version }}
