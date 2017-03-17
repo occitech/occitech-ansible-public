@@ -1,0 +1,17 @@
+
+# Sample for Magento
+
+/home/{{ ansible_user }}/www/var/log/*.log {
+        # weekly rotate
+        weekly
+        # do not alert on empty folder
+        missingok
+        # number of old log file to keep
+        rotate 52
+        # compress old log
+        compress
+        # do not compress the most recent rotated log
+        delaycompress
+        # do not rotate if log empty
+        notifempty
+}
