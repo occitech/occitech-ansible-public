@@ -1,0 +1,37 @@
+---
+- name: ensure needed folders exist
+  file: path={{ elastic_folder }}/{{ item }} state=directory
+  with_items:
+    - log
+    - data
+
+- name: define memory limit into env var
+  lineinfile:
+    create: yes
+    dest: ~/.bash_profile
+    line: export ES_HEAP_SIZE={{ elastic_memory }}
+
+- name: download ElasticSearch
+  get_url:
+    url: https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/{{ elastic_version }}/elasticsearch-{{ elastic_version }}.tar.gz
+    dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
+
+- name: extract ElasticSearch
+  unarchive:
+    src: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
+    dest: "{{ elastic_folder }}/"
+    remote_src: True
+
+- name: send ElasticSearch config
+  template:
+    src:  elasticsearch.yml.j2
+    dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/config/elasticsearch.yml"
+
+- name: install ElasticFence plugin
+  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
+
+- name: install ElasticHead plugin
+  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install mobz/elasticsearch-head"
+
+- name: configure ElasticSearch cron
+  cron: name="launch ElasticSearch {{ elastic_name }} at reboot" special_time=reboot job="{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch -d"

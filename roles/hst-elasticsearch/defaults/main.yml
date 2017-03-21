@@ -1,0 +1,6 @@
+elastic_name: "{{ ansible_user }}"
+elastic_version: 2.4.4
+elastic_folder: "/home/{{ ansible_user }}/elasticsearch"
+elastic_port: 9200
+elastic_memory: 256m
+elastic_pass: ToBeChanged
