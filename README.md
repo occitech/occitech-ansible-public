@@ -2,7 +2,7 @@
 
 ## Requirements
 
-** Ansible >= 2.0
+* Ansible >= 2.0
 
 ## Example
 

@@ -5,3 +5,9 @@
 
 - name: register loopback interface adress as fact
   set_fact: loopback_adress={{ loopback_output.stdout }}
+
+- name: add local env variable to easily retrieve authorized loopback interface value
+  lineinfile:
+    create: yes
+    dest: ~/.bash_profile
+    line: export LOCALSERVER={{ loopback_output.stdout }}
