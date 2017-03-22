@@ -1,0 +1,10 @@
+---
+# due to some hosting python ssl library error
+- name: download last Drupal Console version locally
+  local_action: get_url url=https://drupalconsole.com/installer dest=/tmp/drupal
+
+- name: install Drupal Console
+  copy: 
+    src: /tmp/drupal
+    dest: ~/bin/drupal
+    mode: 0555
