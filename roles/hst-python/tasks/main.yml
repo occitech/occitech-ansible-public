@@ -1,6 +1,23 @@
 ---
+- name: check current installed Python version
+  shell: source ~/.bash_profile; python --version
+  args:
+     executable: /bin/bash
+  ignore_errors: yes
+  register: python_version_output
+
+# Python < 3.4 send version output to stderr.. https://bugs.python.org/issue18338 to improve
+- name: check if Python need to be compiled
+  set_fact: python_need_compilation=true
+  when: (python_version_output.stderr != ("Python " + python_version)) and (python_version not in python_native_version)
+
+- name: compile Python if needed
+  include: compile.yml
+  when: python_need_compilation
+
 - name: set Python version
   lineinfile:
     create: yes
     dest: ~/.bash_profile
     line: export PYTHON_VERSION={{ python_version }}
+  when: (not python_need_compilation) and (python_version in python_native_version)
