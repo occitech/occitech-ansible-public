@@ -1,0 +1,17 @@
+---
+- name: ensure all airflow folders exist
+  file: path="{{ airflow_folder }}" state=directory
+
+- name: create airflow virtualenv
+  shell: source ~/.bash_profile; virtualenv {{ airflow_folder }}
+  args:
+     executable: /bin/bash
+
+- name: install and init airflow
+  shell: source ~/.bash_profile; source $_HOME/.virtualenvs/airflow/bin/activate; {{ item }}
+  with_items:
+    - pip install airflow=={{ airflow_version }}
+    - pip install airflow[hive]=={{ airflow_version }}
+    - airflow initdb
+  args:
+     executable: /bin/bash
