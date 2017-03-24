@@ -37,3 +37,16 @@
     create: yes
     dest: ~/.bash_profile
     line: PATH={{ python_folder }}/builds/{{ python_version }}/bin:$PATH
+
+- name: use local pip egg
+  shell: source ~/.bash_profile; python -m ensurepip
+  args:
+     executable: /bin/bash
+
+- name: install pip package and virtualenv
+  shell: source ~/.bash_profile; pip install {{ item }}
+  with_items:
+    - --upgrade pip
+    - virtualenv
+  args:
+     executable: /bin/bash
