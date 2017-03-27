@@ -16,7 +16,7 @@ echo $LOCALSERVER
 
 Set your app to deliver mail using SMTP on your local address and Mailhog SMTP port instead of your default SMTP settings.
 
-To configure access to Mailhog UI, you need to create a new transparente redirect (reverse proxy) site or add a proxy (example with auth below) into **Advanced Settings** box of an Apache standard site.
+To configure access to Mailhog UI, you need to create a new transparent redirect (reverse proxy) site or add a proxy (example with auth below) into **Advanced Settings** box of an Apache standard site.
 
 ```
 ProxyPreserveHost On
@@ -29,7 +29,7 @@ Deny From All
 
 AuthType Basic
 AuthName "Restricted"
-AuthUserFile "/home/<aacount_name>/.htpasswd"
+AuthUserFile "/home/<acount_name>/.htpasswd"
 Require valid-user
 Satisfy any
 </Location>
