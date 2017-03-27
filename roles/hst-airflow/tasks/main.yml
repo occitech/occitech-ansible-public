@@ -10,6 +10,7 @@
 - name: install and init airflow
   shell: source ~/.bash_profile; source $_HOME/.virtualenvs/airflow/bin/activate; {{ item }}
   with_items:
+    - pip install MySQL-python
     - pip install airflow=={{ airflow_version }}
     - pip install airflow[hive]=={{ airflow_version }}
     - airflow initdb
