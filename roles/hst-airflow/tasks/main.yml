@@ -1,6 +1,15 @@
 ---
 - name: ensure all airflow folders exist
-  file: path="{{ airflow_folder }}" state=directory
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ airflow_folder }}"
+    - ~/airflow
+
+- name: send Airflow config
+  template:
+    src:  airflow.cfg.j2
+    dest: ~/airflow/airflow.cfg
+    force: no
 
 - name: create airflow virtualenv
   shell: source ~/.bash_profile; virtualenv {{ airflow_folder }}
@@ -16,3 +25,6 @@
     - airflow initdb
   args:
      executable: /bin/bash
+
+- name: deploy Airflow cron
+  cron: name="launch Airflow at reboot" special_time=reboot job="source /home/{{ ansible_user }}/.virtualenvs/airflow/bin/activate && airflow webserver -D > ~/airflow.log 2>&1 &"

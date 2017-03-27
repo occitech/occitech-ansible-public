@@ -1,3 +1,4 @@
 ---
 dependencies:
+  - { role: hst-loopback }
   - { role: hst-python, python_version: 2.7.12 }
