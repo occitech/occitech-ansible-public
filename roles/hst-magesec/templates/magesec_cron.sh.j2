@@ -1,0 +1,15 @@
+
+
+MAILTO={{ magesec_mail }}
+MAGENTOS=
+
+MWSCAN=/usr/bin/mwscan
+MWSCANLOCK=~/.mwscan.lock
+MWSCANLOG=/home/{{ ansible_user }}/mwscan.log
+MWSCANFROM="From: Malware Scanner <{{ ansible_user }}@occitech.eu>"
+
+for task in $TASKS; dofor task in $TASKS; do
+
+for MAGENTO in $MAGENTOS; do
+  flock -n $MWSCANLOCK $MWSCAN --ruleset magesec --newonly --quiet $MAGENTO | ts | tee -a $MWSCANLOG | ifne mail -s "Malware found at $(hostname)" -a $MWSCANFROM $MAILTO
+done

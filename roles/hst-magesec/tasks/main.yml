@@ -1,0 +1,26 @@
+---
+- name: ensure all magesec folders exist
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ magesec_folder }}"
+
+- name: create magesec virtualenv
+  shell: source ~/.bash_profile; virtualenv {{ magesec_folder }}
+  args:
+     executable: /bin/bash
+
+- name: install magesec
+  shell: source ~/.bash_profile; source $_HOME/.virtualenvs/magesec/bin/activate; export CFLAGS='-std=gnu99'; {{ item }}
+  with_items:
+    - pip install --upgrade mwscan
+  args:
+     executable: /bin/bash
+
+- name: send magesec cron script
+  template:
+    src:  magesec_cron.sh.j2
+    dest: ~/bin/magesec_cron.sh
+    force: no
+
+- name: deploy magesec cron
+  cron: name="launch magesec at reboot" special_time=daily job="source /home/{{ ansible_user }}/.virtualenvs/magesec/bin/activate && magesec_cron.sh > ~/magesec.log 2>&1 &"
