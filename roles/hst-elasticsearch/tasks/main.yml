@@ -11,10 +11,17 @@
     dest: ~/.bash_profile
     line: export ES_HEAP_SIZE={{ elastic_memory }}
 
-- name: download ElasticSearch
+- name: download ElasticSearch for version < 5.0.0
   get_url:
     url: https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/{{ elastic_version }}/elasticsearch-{{ elastic_version }}.tar.gz
     dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
+  when: ("{{ elastic_version }}" < "5.0.0")
+
+- name: download ElasticSearch for version > 4.x
+  get_url:
+    url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.tar.gz
+    dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
+  when: not ("{{ elastic_version }}" < "5.0.0")
 
 - name: extract ElasticSearch
   unarchive:
@@ -27,11 +34,21 @@
     src:  elasticsearch.yml.j2
     dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/config/elasticsearch.yml"
 
-- name: install ElasticFence plugin
+- name: install ElasticFence plugin for version < 5.0.0
   command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
+  when: ("{{ elastic_version }}" < "5.0.0")
 
-- name: install ElasticHead plugin
+- name: install ElasticFence plugin for version > 4.x
+  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
+  when: not ("{{ elastic_version }}" < "5.0.0")
+
+#- name: install X-Pack plugin for version > 5.1.3
+#  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
+#  when: not ("{{ elastic_version }}" < "5.1.3")
+
+- name: install ElasticHead plugin for version < 5.0.0 (version > 4.x do not support site plugin)
   command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install mobz/elasticsearch-head"
+  when: ("{{ elastic_version }}" < "5.0.0")
 
 - name: configure ElasticSearch cron
   cron: name="launch ElasticSearch {{ elastic_name }} at reboot" special_time=reboot job="{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch -d"

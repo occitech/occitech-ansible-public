@@ -1,4 +1,7 @@
 elastic_name: "{{ ansible_user }}"
+# Warning
+# Elastic Search >= 5 require Java 1.8 or later
+# Elastic Search >= 2 require Java 1.7 or later
 elastic_version: 2.4.4
 elastic_folder: "/home/{{ ansible_user }}/elasticsearch"
 elastic_port: 9200
