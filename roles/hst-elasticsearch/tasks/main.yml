@@ -34,9 +34,13 @@
     src:  elasticsearch.yml.j2
     dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/config/elasticsearch.yml"
 
+- name: check if ElasticFence plugin is installed for version < 5.0.0
+  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin list"
+  register: es_plugin_list
+
 - name: install ElasticFence plugin for version < 5.0.0
   command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
-  when: ("{{ elastic_version }}" < "5.0.0")
+  when: ("{{ elastic_version }}" < "5.0.0") and ( " elasticfence" not in "{{ es_plugin_list.stdout }}" )
 
 - name: install ElasticFence plugin for version > 4.x
   command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
@@ -48,7 +52,7 @@
 
 - name: install ElasticHead plugin for version < 5.0.0 (version > 4.x do not support site plugin)
   command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install mobz/elasticsearch-head"
-  when: ("{{ elastic_version }}" < "5.0.0")
+  when: ("{{ elastic_version }}" < "5.0.0") and ( " head" not in "{{ es_plugin_list.stdout }}" )
 
 - name: configure ElasticSearch cron
   cron: name="launch ElasticSearch {{ elastic_name }} at reboot" special_time=reboot job="{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch -d"
