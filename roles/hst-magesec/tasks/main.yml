@@ -21,6 +21,7 @@
     src:  magesec_cron.sh.j2
     dest: ~/bin/magesec_cron.sh
     force: no
+    mode: 0555
 
 - name: deploy magesec cron
   cron: name="launch magesec at reboot" special_time=daily job="source /home/{{ ansible_user }}/.virtualenvs/magesec/bin/activate && magesec_cron.sh > ~/magesec.log 2>&1 &"

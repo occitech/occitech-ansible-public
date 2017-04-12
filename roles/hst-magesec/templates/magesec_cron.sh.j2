@@ -1,15 +1,21 @@
+#!/bin/bash
 
+ifne () {
+  head=$(dd bs=1 count=1 2>/dev/null; echo a)
+  head=${head%a}
+  if [ "x$head" != x"" ]; then
+    { printf %s "$head"; cat; } | "$@"
+  fi
+}
 
 MAILTO={{ magesec_mail }}
-MAGENTOS=
+SCANDIRS="/home/{{ ansible_user }}/ /storage/{{ ansible_user }}/"
 
-MWSCAN=/usr/bin/mwscan
-MWSCANLOCK=~/.mwscan.lock
+MWSCAN=/home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/mwscan
+MWSCANLOCK=/home/{{ ansible_user }}/.mwscan.lock
 MWSCANLOG=/home/{{ ansible_user }}/mwscan.log
 MWSCANFROM="From: Malware Scanner <{{ ansible_user }}@occitech.eu>"
 
-for task in $TASKS; dofor task in $TASKS; do
-
-for MAGENTO in $MAGENTOS; do
-  flock -n $MWSCANLOCK $MWSCAN --ruleset magesec --newonly --quiet $MAGENTO | ts | tee -a $MWSCANLOG | ifne mail -s "Malware found at $(hostname)" -a $MWSCANFROM $MAILTO
+for SCANDIR in $SCANDIRS; do
+  flock -n $MWSCANLOCK $MWSCAN --ruleset magesec --quiet $SCANDIR  | tee -a $MWSCANLOG | ifne mail -s "[MWSCAN] Malware found on {{ ansible_user }} account on $(hostname) server" -a "$MWSCANFROM" $MAILTO
 done
