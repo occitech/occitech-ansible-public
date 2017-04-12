@@ -1,0 +1,39 @@
+---
+- name: ensure all Supervisor configuration folders exist
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ supervisor_folder }}/conf.d"
+    - "{{ supervisor_folder }}/log"
+    - "{{ supervisor_folder }}/run"
+    - "/home/{{ ansible_user }}/python/builds/{{ python_version }}/etc"
+
+- name: install Supervisor
+  pip:
+    name: supervisor
+    version: "{{ supervisor_version }}"
+
+- name: send Supervisor configuration file
+  template:
+    src:  supervisord.conf.j2
+    dest: "{{ supervisor_folder }}/supervisord.conf"
+
+- name: link Supervisor configuration file to default path
+  file:
+    src: "{{ supervisor_folder }}/supervisord.conf"
+    dest: /home/{{ ansible_user }}/python/builds/{{ python_version }}/etc/supervisord.conf"
+    state: link
+
+- name: check supervisor status
+  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl status
+  register: supervisor_status
+  ignore_errors: yes
+
+- name: start Supervisor if not already running
+  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisord
+  when: supervisor_status.stderr != ""
+
+- name: ensure Supervisor start at boot
+  cron:
+    name: launch Supervisor
+    special_time: reboot
+    job: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisord
