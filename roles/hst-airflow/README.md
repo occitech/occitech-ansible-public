@@ -9,7 +9,7 @@ Airflow
 
 * approximative size: 12MB
 * default server port: 8088
-* default server version: 1.7.1.3
+* default server version: 1.8.0
 
 ## Usage
 
