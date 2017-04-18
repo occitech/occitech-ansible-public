@@ -11,6 +11,8 @@
   pip:
     name: supervisor
     version: "{{ supervisor_version }}"
+  environment:
+    PATH: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin:$PATH
 
 - name: send Supervisor configuration file
   template:
