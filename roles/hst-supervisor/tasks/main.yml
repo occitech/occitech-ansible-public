@@ -22,7 +22,7 @@
 - name: link Supervisor configuration file to default path
   file:
     src: "{{ supervisor_folder }}/supervisord.conf"
-    dest: /home/{{ ansible_user }}/python/builds/{{ python_version }}/etc/supervisord.conf"
+    dest: /home/{{ ansible_user }}/python/builds/{{ python_version }}/etc/supervisord.conf
     state: link
 
 - name: check supervisor status
@@ -32,7 +32,7 @@
 
 - name: start Supervisor if not already running
   command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisord
-  when: supervisor_status.stderr != ""
+  when: '("refused connection" in supervisor_status.stdout) or ("no such file" in supervisor_status.stdout)'
 
 - name: ensure Supervisor start at boot
   cron:
