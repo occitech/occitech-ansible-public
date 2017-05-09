@@ -15,7 +15,10 @@ MWSCAN=/home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/mwscan
 MWSCANLOCK=/home/{{ ansible_user }}/.mwscan.lock
 MWSCANLOG=/home/{{ ansible_user }}/mwscan.log
 MWSCANFROM="From: Malware Scanner <{{ ansible_user }}@occitech.eu>"
+MWWHITELIST=/home/{{ ansible_user }}/mwscan_whitelist.txt
+
+touch $MWWHITELIST
 
 for SCANDIR in $SCANDIRS; do
-  flock -n $MWSCANLOCK $MWSCAN --ruleset magesec --quiet $SCANDIR  | tee -a $MWSCANLOG | ifne mail -s "[MWSCAN] Malware found on {{ ansible_user }} account on $(hostname) server" -a "$MWSCANFROM" $MAILTO
+  flock -n $MWSCANLOCK $MWSCAN -w $MWWHITELIST --ruleset magesec --quiet $SCANDIR  | tee -a $MWSCANLOG | ifne mail -s "[MWSCAN] Malware found on {{ ansible_user }} account on $(hostname) server" -a "$MWSCANFROM" $MAILTO
 done
