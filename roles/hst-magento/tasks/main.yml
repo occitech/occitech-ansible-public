@@ -1,0 +1,33 @@
+---
+- pause:
+    prompt: "Enter database name, press (ctrl+c) and then (c) after:"
+  register: prompt_dbname
+  when: magento_dbname is not defined
+
+- set_fact:
+    magento_dbname: "{{ prompt_dbname.user_input }}"
+  when: magento_dbname is not defined
+
+- pause:
+    prompt: "Enter database user, press (ctrl+c) and then (c) after:"
+  register: prompt_dbuser
+  when: magento_dbuser is not defined
+
+- set_fact:
+    magento_dbuser: "{{ prompt_dbuser.user_input }}"
+  when: magento_dbuser is not defined
+
+- pause:
+    prompt: "Enter database pass, press (ctrl+c) and then (c) after:"
+  register: prompt_dbpass
+  when: magento_dbpass is not defined
+
+- set_fact:
+    magento_dbpass: "{{ prompt_dbpass.user_input }}"
+  when: magento_dbpass is not defined
+
+- name: set magerun config
+  template: src=n98-magerun.yaml.j2 dest=/home/{{ ansible_user }}/.n98-magerun.yaml
+
+- name: install Magento
+  shell: /home/{{ ansible_user }}/bin/n98-magerun install --magentoVersion=magento-ce-{{ magento_version }} --installationFolder={{ magento_folder }} --dbHost={{ magento_dbhost }} --dbUser={{ magento_dbuser }} --dbName={{ magento_dbname }} --dbPass={{ magento_dbpass }} --no-interaction
