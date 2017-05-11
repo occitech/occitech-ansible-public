@@ -27,6 +27,6 @@
 - name: install and set Ruby {{ ruby_version }} as default version
   command: chdir=~/ {{item}}
   with_items:
-    - ~/.rbenv/bin/rbenv install {{ ruby_version }}
+    - ~/.rbenv/bin/rbenv install -s {{ ruby_version }}
     - ~/.rbenv/bin/rbenv rehash
     - ~/.rbenv/bin/rbenv global {{ ruby_version }}
