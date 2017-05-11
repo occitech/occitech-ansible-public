@@ -17,7 +17,7 @@
      executable: /bin/bash
 
 - name: install and init airflow
-  shell: source ~/.bash_profile; source $_HOME/.virtualenvs/airflow/bin/activate; {{ item }}
+  shell: source ~/.bash_profile; source /home/{{ ansible_user }}/.virtualenvs/airflow/bin/activate; {{ item }}
   with_items:
     - pip install MySQL-python
     - pip install airflow=={{ airflow_version }}
@@ -25,6 +25,3 @@
     - airflow initdb
   args:
      executable: /bin/bash
-
-- name: deploy Airflow cron
-  cron: name="launch Airflow at reboot" special_time=reboot job="source /home/{{ ansible_user }}/.virtualenvs/airflow/bin/activate && airflow webserver -D > ~/airflow.log 2>&1 &"
