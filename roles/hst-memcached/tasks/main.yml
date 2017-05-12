@@ -20,8 +20,14 @@
 - name: configure and compile Memcached
   shell: chdir={{ memcached_folder }}/src/memcached-{{ memcached_version }}/ ./configure && make
 
-- name: set Memcached cron
-  cron: name="launch {{ memcached_name }} at reboot" special_time=reboot job="{{ memcached_folder }}/src/memcached-{{ memcached_version }}/memcached -l {{ loopback_adress }} -p {{ memcached_port }} -d -m {{ memcached_memory }}MB -P {{ memcached_folder }}/run/{{ memcached_name }}.pid -t 8"
+- name: send Supervisor config
+  template:
+    src:  supervisor.conf.j2
+    dest: "{{ supervisor_folder }}/conf.d/{{ memcached_name }}.conf"
+
+- name: reload Supervisor config to launch Memcached
+  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
+
 
 - name: download Memcached lib source
   get_url:
