@@ -22,8 +22,8 @@ To configure access to Airflow UI, you need to create a new transparent redirect
 
 ```
 ProxyPreserveHost On
-ProxyPass / http://<local_address>:<mailhog_port>/
-ProxyPassReverse / http://<local_address>:<mailhog_port>/
+ProxyPass / http://<local_address>:<airflow_port>/
+ProxyPassReverse / http://<local_address>:<airflow_port>/
 
 <Location />
 Order Deny,allow

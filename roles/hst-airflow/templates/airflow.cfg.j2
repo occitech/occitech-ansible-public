@@ -77,7 +77,7 @@ unit_test_mode = False
 # database directly, while the json_client will use the api running on the
 # webserver
 api_client = airflow.api.client.local_client
-endpoint_url = http://localhost:8080
+endpoint_url = http://{{ airflow_hostname }}:{{ airflow_port }}
 
 [api]
 # How to authenticate users of the API
@@ -226,8 +226,8 @@ catchup_by_default = False
 
 # Statsd (https://github.com/etsy/statsd) integration settings
 statsd_on = False
-statsd_host = localhost
-statsd_port = 8125
+statsd_host = {{ airflow_hostname }}
+statsd_port = {{ airflow_statsd_port }}
 statsd_prefix = airflow
 # The scheduler can run multiple threads in parallel to schedule dags.
 # This defines how many threads will run. However airflow will never
@@ -237,7 +237,7 @@ authenticate = False
 
 [mesos]
 # Mesos master address which MesosExecutor will connect to.
-master = localhost:5050
+master = {{ airflow_hostname }}:{{ airflow_meso_port }}
 # The framework name which Airflow scheduler will register itself as on mesos
 framework_name = Airflow
 # Number of cpu cores required for running one task instance using
