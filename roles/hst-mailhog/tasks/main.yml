@@ -5,5 +5,10 @@
     dest: ~/bin/mailhog
     mode: 0555
 
-- name: deploy Mailhog cron
-  cron: name="{{ mailhog_hostname }} launch mailhog at reboot" special_time=reboot job="/home/{{ ansible_user }}/bin/mailhog -hostname {{ mailhog_hostname }} -smtp-bind-addr {{ loopback_adress }}:{{ mailhog_smtp_sock }} -ui-bind-addr {{ loopback_adress }}:{{ mailhog_ui_sock }} -api-bind-addr {{ loopback_adress }}:{{ mailhog_api_sock }} > /dev/null 2>&1 &"
+- name: send Supervisor config
+  template:
+    src:  supervisor.conf.j2
+    dest: "{{ supervisor_folder }}/conf.d/{{ mailhog_name }}.conf"
+
+- name: reload Supervisor config to launch Mailhog
+  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
