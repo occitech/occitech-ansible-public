@@ -30,7 +30,7 @@
     remote_src: True
 
 - name: move ElasticSearch folder to this final destination
-  shell: cp -rf {{ elastic_folder }}/elasticsearch-{{ elastic_version }} {{ elastic_folder }}/{{ elastic_name }} && rm -rf {{ elastic_folder }}/elasticsearch-{{ elastic_version }}
+  shell: cp -rTf {{ elastic_folder }}/elasticsearch-{{ elastic_version }} {{ elastic_folder }}/{{ elastic_name }} && rm -rf {{ elastic_folder }}/elasticsearch-{{ elastic_version }}
 
 - name: send ElasticSearch config
   template:
