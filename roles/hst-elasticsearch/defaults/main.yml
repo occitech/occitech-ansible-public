@@ -1,4 +1,4 @@
-elastic_name: "{{ ansible_user }}"
+elastic_name: elasticsearch
 # Warning
 # Elastic Search >= 5 require Java 1.8 or later
 # Elastic Search >= 2 require Java 1.7 or later

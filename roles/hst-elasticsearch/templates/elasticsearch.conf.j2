@@ -1,0 +1,9 @@
+[program:{{ elastic_name }}]
+command={{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch
+socket=tcp://{{ loopback_adress }}:{{ elastic_port }}
+autostart=true
+autorestart=true
+startsecs=5
+stopwaitsecs=5
+stopasgroup=true
+killasgroup=true

@@ -15,13 +15,13 @@
   get_url:
     url: https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/{{ elastic_version }}/elasticsearch-{{ elastic_version }}.tar.gz
     dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
-  when: ("{{ elastic_version }}" < "5.0.0")
+  when: ( elastic_version < "5.0.0" )
 
 - name: download ElasticSearch for version > 4.x
   get_url:
     url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.tar.gz
     dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
-  when: not ("{{ elastic_version }}" < "5.0.0")
+  when: not ( elastic_version < "5.0.0" )
 
 - name: extract ElasticSearch
   unarchive:
@@ -29,30 +29,38 @@
     dest: "{{ elastic_folder }}/"
     remote_src: True
 
+- name: move ElasticSearch folder to this final destination
+  shell: cp -rf {{ elastic_folder }}/elasticsearch-{{ elastic_version }} {{ elastic_folder }}/{{ elastic_name }} && rm -rf {{ elastic_folder }}/elasticsearch-{{ elastic_version }}
+
 - name: send ElasticSearch config
   template:
     src:  elasticsearch.yml.j2
-    dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/config/elasticsearch.yml"
+    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
 
 - name: check if ElasticFence plugin is installed for version < 5.0.0
-  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin list"
+  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin list"
   register: es_plugin_list
 
 - name: install ElasticFence plugin for version < 5.0.0
-  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
-  when: ("{{ elastic_version }}" < "5.0.0") and ( " elasticfence" not in "{{ es_plugin_list.stdout }}" )
+  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
+  when: ( elastic_version < "5.0.0" ) and ( "elasticfence" not in es_plugin_list.stdout )
 
 - name: install ElasticFence plugin for version > 4.x
-  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
-  when: not ("{{ elastic_version }}" < "5.0.0")
+  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
+  when: not ( elastic_version < "5.0.0" )
 
 #- name: install X-Pack plugin for version > 5.1.3
 #  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
 #  when: not ("{{ elastic_version }}" < "5.1.3")
 
 - name: install ElasticHead plugin for version < 5.0.0 (version > 4.x do not support site plugin)
-  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/plugin install mobz/elasticsearch-head"
-  when: ("{{ elastic_version }}" < "5.0.0") and ( " head" not in "{{ es_plugin_list.stdout }}" )
+  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin install mobz/elasticsearch-head"
+  when: ( elastic_version < "5.0.0" ) and ( "head" not in es_plugin_list.stdout )
 
-- name: configure ElasticSearch cron
-  cron: name="launch ElasticSearch {{ elastic_name }} at reboot" special_time=reboot job="{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch -d"
+- name: send Supervisor config
+  template:
+    src:  elasticsearch.conf.j2
+    dest: "{{ supervisor_folder }}/conf.d/{{ elastic_name }}.conf"
+
+- name: reload Supervisor config to launch ElasticSearch
+  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
