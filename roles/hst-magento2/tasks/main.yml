@@ -44,12 +44,6 @@
     magento2_dbpass: "{{ prompt_ckeypriv.user_input }}"
   when: magento2_ckeypriv is not defined
 
-#- name: set Magento Connect key for composer
-#  shell: /home/{{ ansible_user }}/bin/composer global config http-basic.repo.magento.com {{ magento2_ckeypub }} {{ magento2_ckeypriv }}
-#
-#- name: install Magento
-#  shell: /home/{{ ansible_user }}/bin/n98-magerun2 install --dbHost="localhost" --dbUser="{{ magento2_dbuser }}" --dbPass="{{ magento2_dbpass }}" --dbName="{{ magento2_dbname }}" --installSampleData=yes --useDefaultConfigParams=yes --magentoVersionByName="magento-ce-{{ magento2_version }}" --installationFolder="{{ magento2_folder }}" --baseUrl="{{ magento2_baseurl }}"
-
 - name: delete previous install directory
   file: path={{ magento2_folder }} state=absent
 
