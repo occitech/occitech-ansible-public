@@ -1,6 +1,6 @@
 magento_version: 1.9.3.2
-magento_folder: /home/{{ ansible_user }}/www
-magento_baseurl: "{{ ansible_user }}.occitech.eu"
+magento_folder: /home/{{ ansible_user }}/magento
+magento_baseurl: "http://{{ ansible_user }}.occitech.eu"
 magento_dbhost: mysql-{{ ansible_user }}.occitech.eu
 magento_currency: EUR
 magento_locale: fr_FR
@@ -10,6 +10,6 @@ magento_session_save: files
 magento_admin_username: "{{ ansible_user }}"
 magento_admin_firstname: "{{ ansible_user }}"
 magento_admin_lastname: occitech.eu
-magento_admin_password: tobechanged
+magento_admin_password: tobechang3d!
 magento_admin_email: "{{ ansible_user }}@occitech.eu"
 magento_encryption_key: "{{ 9999999999999999999999 | random }}"
