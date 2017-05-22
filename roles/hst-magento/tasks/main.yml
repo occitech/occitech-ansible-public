@@ -26,6 +26,18 @@
     magento_dbpass: "{{ prompt_dbpass.user_input }}"
   when: magento_dbpass is not defined
 
+- name: delete previous install directory
+  file: path={{ magento_folder }} state=absent
+
+- name: create install directory
+  file: path={{ magento_folder }} state=directory
+
+- name: configure access to database for mysql tools
+  template: src=.my.cnf.j2  dest=~/.my_{{ magento_dbname }}.cnf
+
+- name: flush MySQL database
+  command: mysql --defaults-extra-file=~/.my_{{ magento_dbname }}.cnf -e "drop database {{ magento_dbname }}; create database {{ magento_dbname }};"
+
 - name: set magerun config
   template: src=n98-magerun.yaml.j2 dest=/home/{{ ansible_user }}/.n98-magerun.yaml
 

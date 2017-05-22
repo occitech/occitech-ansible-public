@@ -1,10 +1,12 @@
-# Magento
+# Magento 1
 
 Role to install a fresh Magento 1
 
-* approximative size: 0MB
+**WARNING**: detination path and database will be erased during installation
 
-WARNING: before installation you need to configure PHP to use 5.6 version with the following paramters
+* approximative size: 600MB
+
+**Prerequisite**: before installation you need to configure PHP to use 5.6 version with the following paramters
 ```
 memory_limit=256M
 extension=zip.so
