@@ -1,0 +1,85 @@
+---
+- pause:
+    prompt: "Enter database name, press (ctrl+c) and then (c) after:"
+  register: prompt_dbname
+  when: magento2_dbname is not defined
+
+- set_fact:
+    magento2_dbname: "{{ prompt_dbname.user_input }}"
+  when: magento2_dbname is not defined
+
+- pause:
+    prompt: "Enter database user, press (ctrl+c) and then (c) after:"
+  register: prompt_dbuser
+  when: magento2_dbuser is not defined
+
+- set_fact:
+    magento2_dbuser: "{{ prompt_dbuser.user_input }}"
+  when: magento2_dbuser is not defined
+
+- pause:
+    prompt: "Enter database pass, press (ctrl+c) and then (c) after:"
+  register: prompt_dbpass
+  when: magento2_dbpass is not defined
+
+- set_fact:
+    magento2_dbpass: "{{ prompt_dbpass.user_input }}"
+  when: magento2_dbpass is not defined
+
+- pause:
+    prompt: "Enter Magento Connect public key, press (ctrl+c) and then (c) after:"
+  register: prompt_ckeypub
+  when: magento2_ckeypub is not defined
+
+- set_fact:
+    magento2_dbpass: "{{ prompt_ckeypub.user_input }}"
+  when: magento2_ckeypub is not defined
+
+- pause:
+    prompt: "Enter Magento Connect private key, press (ctrl+c) and then (c) after:"
+  register: prompt_ckeypriv
+  when: magento2_ckeypriv is not defined
+
+- set_fact:
+    magento2_dbpass: "{{ prompt_ckeypriv.user_input }}"
+  when: magento2_ckeypriv is not defined
+
+#- name: set Magento Connect key for composer
+#  shell: /home/{{ ansible_user }}/bin/composer global config http-basic.repo.magento.com {{ magento2_ckeypub }} {{ magento2_ckeypriv }}
+#
+#- name: install Magento
+#  shell: /home/{{ ansible_user }}/bin/n98-magerun2 install --dbHost="localhost" --dbUser="{{ magento2_dbuser }}" --dbPass="{{ magento2_dbpass }}" --dbName="{{ magento2_dbname }}" --installSampleData=yes --useDefaultConfigParams=yes --magentoVersionByName="magento-ce-{{ magento2_version }}" --installationFolder="{{ magento2_folder }}" --baseUrl="{{ magento2_baseurl }}"
+
+- name: delete previous install directory
+  file: path={{ magento2_folder }} state=absent
+
+- name: create install directory
+  file: path={{ magento2_folder }} state=directory
+
+- name: configure access to database for mysql tools
+  template: src=.my.cnf.j2  dest=~/.my_{{ magento2_dbname }}.cnf
+
+- name: flush MySQL database
+  command: mysql --defaults-extra-file=~/.my_{{ magento2_dbname }}.cnf -e "drop database {{ magento2_dbname }}; create database {{ magento2_dbname }};"
+
+- name: deploy magento and modules
+  command: ~/bin/composer --ignore-platform-reqs create-project magento/community-edition:{{ magento2_version }} .
+    chdir={{ magento2_folder }}
+
+- name: config composer environment
+  command: ~/bin/composer config {{ item }}
+    chdir={{ magento2_folder }}
+  with_items:
+    - "repositories.magento composer https://repo.magento.com/packages.json"
+    - "http-basic.repo.magento.com {{ magento2_ckeypub }} {{ magento2_ckeypriv }}"
+
+- name: configure magento
+  command: bin/magento setup:install --base-url={{ magento2_baseurl }} --db-host={{ magento2_dbhost }} --db-name={{ magento2_dbname }} --db-user={{ magento2_dbuser }} --db-password={{ magento2_dbpass }} --admin-firstname={{ magento2_admin_firstname }} --admin-lastname={{ magento2_admin_lastname }} --admin-email={{ magento2_admin_email }} --admin-user={{ magento2_admin_username }} --admin-password={{ magento2_admin_password }} --language={{ magento2_locale }} --currency={{ magento2_currency }} --timezone={{ magento2_timezone }} --use-rewrites="1" --backend-frontname={{ magento2_backend }}
+    chdir={{ magento2_folder }}
+
+- name: deploy sample data
+  command: bin/magento {{ item }}
+    chdir={{ magento2_folder }}
+  with_items:
+    - "sampledata:deploy"
+    - "setup:upgrade"
