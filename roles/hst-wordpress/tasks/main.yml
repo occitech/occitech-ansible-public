@@ -29,6 +29,18 @@
     wordpress_dbpass: "{{ prompt_dbpass.user_input }}"
   when: wordpress_dbpass is not defined
 
+- name: delete previous install directory
+  file: path={{ wordpress_folder }} state=absent
+
+- name: create install directory
+  file: path={{ wordpress_folder }} state=directory
+
+- name: configure access to database for mysql tools
+  template: src=.my.cnf.j2  dest=~/.my_{{ wordpress_dbname }}.cnf
+
+- name: flush MySQL database
+  command: mysql --defaults-extra-file=~/.my_{{ wordpress_dbname }}.cnf -e "drop database {{ wordpress_dbname }}; create database {{ wordpress_dbname }};"
+
 - name: download, install and configure WordPress
   shell: chdir={{ wordpress_folder }}/ ~/bin/wp core {{ item }}
   with_items:
