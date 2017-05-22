@@ -1,0 +1,49 @@
+---
+- name: ensure folder exist
+  file: path="{{ wordpress_folder }}" state=directory
+
+- pause:
+    prompt: "Enter database name, press (ctrl+c) and then (c) after:"
+  register: prompt_dbname
+  when: wordpress_dbname is not defined
+
+- set_fact:
+    wordpress_dbname: "{{ prompt_dbname.user_input }}"
+  when: wordpress_dbname is not defined
+
+- pause:
+    prompt: "Enter database user, press (ctrl+c) and then (c) after:"
+  register: prompt_dbuser
+  when: wordpress_dbuser is not defined
+
+- set_fact:
+    wordpress_dbuser: "{{ prompt_dbuser.user_input }}"
+  when: wordpress_dbuser is not defined
+
+- pause:
+    prompt: "Enter database pass, press (ctrl+c) and then (c) after:"
+  register: prompt_dbpass
+  when: wordpress_dbpass is not defined
+
+- set_fact:
+    wordpress_dbpass: "{{ prompt_dbpass.user_input }}"
+  when: wordpress_dbpass is not defined
+
+- name: delete previous install directory
+  file: path={{ wordpress_folder }} state=absent
+
+- name: create install directory
+  file: path={{ wordpress_folder }} state=directory
+
+- name: configure access to database for mysql tools
+  template: src=.my.cnf.j2  dest=~/.my_{{ wordpress_dbname }}.cnf
+
+- name: flush MySQL database
+  command: mysql --defaults-extra-file=~/.my_{{ wordpress_dbname }}.cnf -e "drop database {{ wordpress_dbname }}; create database {{ wordpress_dbname }};"
+
+- name: download, install and configure WordPress
+  shell: chdir={{ wordpress_folder }}/ ~/bin/wp core {{ item }}
+  with_items:
+  - download --locale={{ wordpress_locale }}
+  - config --dbhost={{ wordpress_dbhost }} --dbname={{ wordpress_dbname }} --dbuser={{ wordpress_dbuser }} --dbpass={{ wordpress_dbpass }} --locale={{ wordpress_locale }}
+  - install --url={{ wordpress_url }} --title='{{ wordpress_title }}' --admin_user='{{ wordpress_user }}' --admin_password='{{ wordpress_admin_pass }}' --admin_email={{ wordpress_admin_mail }}
