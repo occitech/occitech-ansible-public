@@ -1,16 +1,17 @@
 
 magento2_version: 2.1.5
-magento2_folder: /home/{{ ansible_user }}/www
-magento2_baseurl: "{{ ansible_user }}.occitech.eu"
+magento2_folder: /home/{{ ansible_user }}/magento2
+magento2_baseurl: "http://{{ ansible_user }}.occitech.eu"
+magento2_backend: "admin"
 magento2_dbhost: mysql-{{ ansible_user }}.occitech.eu
-magento_currency: EUR
-magento_locale: fr_FR
-magento_timezone: Europe/paris
-magento_use_rewrites: yes
-magento_session_save: files
-magento_admin_username: "{{ ansible_user }}"
-magento_admin_firstname: "{{ ansible_user }}"
-magento_admin_lastname: occitech.eu
-magento_admin_password: tobechanged
-magento_admin_email: "{{ ansible_user }}@occitech.eu"
-magento_encryption_key: "{{ 9999999999999999999999 | random }}"
+magento2_currency: EUR
+magento2_locale: fr_FR
+magento2_timezone: Europe/Paris
+magento2_use_rewrites: yes
+magento2_session_save: files
+magento2_admin_username: "{{ ansible_user }}"
+magento2_admin_firstname: "{{ ansible_user }}"
+magento2_admin_lastname: occitech.eu
+magento2_admin_password: tobechang3d!
+magento2_admin_email: "{{ ansible_user }}@occitech.eu"
+magento2_encryption_key: "{{ 9999999999999999999999 | random }}"
