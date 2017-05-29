@@ -1,5 +1,6 @@
 mailhog_name: mailhog
 mailhog_version: 1.0.0
+mhsendmail_version: 0.2.0
 mailhog_hostname: "{{ ansible_user }}.occitech.eu"
 mailhog_smtp_sock: 1032
 mailhog_ui_sock: 8032
