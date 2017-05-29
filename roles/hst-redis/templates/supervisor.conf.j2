@@ -1,5 +1,5 @@
 [program:{{ redis_name }}]
-command=/usr/bin/redis-server /home/{{ ansible_user }}/redis/{{ redis_name }}/etc/redis.conf 
+command=/home/{{ ansible_user }}/redis/{{ redis_name }}/redis-{{ redis_version }}/src/redis-server /home/{{ ansible_user }}/redis/{{ redis_name }}/etc/redis.conf 
 socket=tcp://{{ loopback_adress }}:{{ redis_port }}
 autostart=true
 autorestart=true
