@@ -25,3 +25,11 @@
     - airflow initdb
   args:
      executable: /bin/bash
+
+- name: send Supervisor config
+  template:
+    src:  supervisor.conf.j2
+    dest: "{{ supervisor_folder }}/conf.d/{{ airflow_name }}.conf"
+
+- name: reload Supervisor config to launch Redis
+  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
