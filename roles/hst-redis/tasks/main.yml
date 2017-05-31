@@ -6,6 +6,24 @@
     - etc
     - data
 
+- name: Download and extract Redis
+  unarchive:
+    src: http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz
+    dest: ~/redis/{{ redis_name }}/
+    remote_src: True
+
+- name: compile Redis
+  command: chdir=~/redis/{{ redis_name }}/redis-{{ redis_version }}/ make
+
+- name: link Redis binaries
+  file:
+    src: '/home/{{ ansible_user }}/redis/{{ redis_name }}/redis-{{ redis_version }}/src/{{ item }}'
+    dest: '~/bin/{{ item }}'
+    state: link
+  with_items:
+    - redis-server
+    - redis-cli
+
 - name: send Redis config
   template:
     src:  redis.conf.j2

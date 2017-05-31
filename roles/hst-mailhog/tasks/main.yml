@@ -5,6 +5,12 @@
     dest: ~/bin/mailhog
     mode: 0555
 
+- name: install mhsendmail (sendmail replacement for MailHog)
+  get_url:
+    url: https://github.com/mailhog/mhsendmail/releases/download/v{{ mhsendmail_version }}/mhsendmail_linux_amd64
+    dest: ~/bin/mhsendmail
+    mode: 0555
+
 - name: send Supervisor config
   template:
     src:  supervisor.conf.j2
