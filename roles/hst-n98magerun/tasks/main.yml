@@ -5,3 +5,12 @@
     validate_certs: no
     dest: ~/bin/n98-magerun
     mode: 0555
+  when: magerun_version == "latest"
+
+- name: install n98 magerun
+  get_url:
+    url: https://files.magerun.net/n98-magerun-{{ magerun_version }}.phar
+    validate_certs: no
+    dest: ~/bin/n98-magerun
+    mode: 0555
+  when: magerun_version != "latest"
