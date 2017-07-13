@@ -11,13 +11,18 @@
     dest: ~/airflow/airflow.cfg
     force: no
 
-- name: create airflow virtualenv
+- name: check if virtualenv exist
+  stat: path="{{ airflow_folder }}"
+  register: virtualenv_folder
+
+- name: create airflow virtualenv if it do not exist
   shell: source ~/.bash_profile; virtualenv {{ airflow_folder }}
   args:
      executable: /bin/bash
+  when: not virtualenv_folder.stat.exists
 
 - name: install and init airflow
-  shell: source ~/.bash_profile; source /home/{{ ansible_user }}/.virtualenvs/airflow/bin/activate; {{ item }}
+  shell: source ~/.bash_profile; source {{ airflow_folder }}/bin/activate; {{ item }}
   with_items:
     - pip install MySQL-python
     - pip install airflow=={{ airflow_version }}

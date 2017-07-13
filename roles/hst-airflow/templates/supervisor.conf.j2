@@ -12,4 +12,4 @@ stopsignal=QUIT
 stopasgroup=true
 killasgroup=true
 autorestart=true
-environment=AIRFLOW_HOME="/home/{{ ansible_user }}/airflow",HOME="/home/{{ ansible_user }}",VIRTUAL_ENV="/home/{{ ansible_user }}/.virtualenvs/airflow",PATH="/home/{{ ansible_user }}/.virtualenvs/airflow/bin:$%(ENV_PATH)s"
+environment={{ airflow_scheduler_env }}
