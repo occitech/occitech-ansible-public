@@ -1,6 +1,6 @@
 ---
 - name: get authorized loopback interface
-  command: python -c 'from socket import inet_ntoa; from struct import pack; from pwd import getpwuid; from os import getuid; print inet_ntoa(pack("!L", 0x7f000000 | getpwuid( getuid() ).pw_gid))'
+  command: python -c 'from socket import inet_ntoa; from struct import pack; from pwd import getpwuid; from os import getuid; print(inet_ntoa(pack("!L", 0x7f000000 | getpwuid( getuid() ).pw_gid)))'
   register: loopback_output
 
 - name: register loopback interface adress as fact
