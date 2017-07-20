@@ -10,7 +10,7 @@
   pip:
     name: supervisor
     version: "{{ supervisor_version }}"
-    executable: /home/occitech/python/builds/2.7.12/bin/pip
+    executable: /home/{{ ansible_user }}/python/builds/2.7.12/bin/pip
   environment:
     PATH: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin:{{ ansible_env.PATH }}
 
