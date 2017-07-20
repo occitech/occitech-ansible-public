@@ -21,6 +21,21 @@
      executable: /bin/bash
   when: not virtualenv_folder.stat.exists
 
+- name: check if airflow use .local path
+  stat:
+    path: /home/{{ ansible_user }}/.local/bin/airflow
+  register: airflow_local
+
+- name: register airflow bin path
+  set_fact:
+    airflow_bin: /home/{{ ansible_user }}/.virtualenvs/airflow/bin
+  when: not airflow_local.stat.exists
+
+- name: register airflow bin path
+  set_fact:
+    airflow_bin: /home/{{ ansible_user }}/.local/bin
+  when: airflow_local.stat.exists
+
 - name: install and init airflow
   shell: source ~/.bash_profile; source {{ airflow_folder }}/bin/activate; {{ item }}
   with_items:
@@ -30,6 +45,8 @@
     - airflow initdb
   args:
      executable: /bin/bash
+  environment:
+    PATH: /home/{{ ansible_user }}/.local/bin:{{ ansible_env.PATH }}
 
 - name: send Supervisor config
   template:
@@ -37,4 +54,4 @@
     dest: "{{ supervisor_folder }}/conf.d/{{ airflow_name }}.conf"
 
 - name: reload Supervisor config to launch Redis
-  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
+  command: "{{ supervisor_bin }}/supervisorctl update"

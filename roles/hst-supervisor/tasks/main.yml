@@ -1,41 +1,72 @@
 ---
-- name: ensure all Supervisor configuration folders exist
+- name: ensure all Supervisor working folders exist
   file: path="{{ item }}" state=directory
   with_items:
     - "{{ supervisor_folder }}/conf.d"
     - "{{ supervisor_folder }}/log"
     - "{{ supervisor_folder }}/run"
-    - "/home/{{ ansible_user }}/python/builds/{{ python_version }}/etc"
 
 - name: install Supervisor
   pip:
     name: supervisor
     version: "{{ supervisor_version }}"
+    executable: /home/occitech/python/builds/2.7.12/bin/pip
   environment:
-    PATH: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin:$PATH
+    PATH: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin:{{ ansible_env.PATH }}
 
 - name: send Supervisor configuration file
   template:
     src:  supervisord.conf.j2
     dest: "{{ supervisor_folder }}/supervisord.conf"
 
+- name: check if supervisor use .local path
+  stat:
+    path: /home/{{ ansible_user }}/.local/bin/supervisorctl
+  register: supervisor_local
+
+- name: ensure Supervisor configuration folders exist
+  file: path="/home/{{ ansible_user }}/python/builds/{{ python_version }}/etc" state=directory
+  when: not supervisor_local.stat.exists
+
+- name: ensure Supervisor configuration folders exist
+  file: path="/home/{{ ansible_user }}/.local/etc" state=directory
+  when: supervisor_local.stat.exists
+
 - name: link Supervisor configuration file to default path
   file:
     src: "{{ supervisor_folder }}/supervisord.conf"
     dest: /home/{{ ansible_user }}/python/builds/{{ python_version }}/etc/supervisord.conf
     state: link
+  when: not supervisor_local.stat.exists
+
+- name: link Supervisor configuration file to default path
+  file:
+    src: "{{ supervisor_folder }}/supervisord.conf"
+    dest: /home/{{ ansible_user }}/.local/etc/supervisord.conf
+    state: link
+  when: supervisor_local.stat.exists
+
+- name: register supervisor bin path
+  set_fact:
+    supervisor_bin: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin
+  when: not supervisor_local.stat.exists
+
+- name: register supervisor bin path
+  set_fact:
+    supervisor_bin: /home/{{ ansible_user }}/.local/bin
+  when: supervisor_local.stat.exists
 
 - name: check supervisor status
-  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl status
+  command: "{{ supervisor_bin }}/supervisorctl status"
   register: supervisor_status
   ignore_errors: yes
 
 - name: start Supervisor if not already running
-  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisord
+  command: "{{ supervisor_bin }}/supervisord"
   when: '("refused connection" in supervisor_status.stdout) or ("no such file" in supervisor_status.stdout)'
 
 - name: ensure Supervisor start at boot
   cron:
     name: launch Supervisor
     special_time: reboot
-    job: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisord
+    job: "{{ supervisor_bin }}/supervisord"

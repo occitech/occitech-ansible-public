@@ -26,8 +26,7 @@
     dest: "{{ supervisor_folder }}/conf.d/{{ memcached_name }}.conf"
 
 - name: reload Supervisor config to launch Memcached
-  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
-
+  command: "{{ supervisor_bin }}/supervisorctl update"
 
 - name: download Memcached lib source
   get_url:

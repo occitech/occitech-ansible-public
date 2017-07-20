@@ -1,5 +1,5 @@
 [program:{{ airflow_name }}-webserver]
-command=/home/{{ ansible_user }}/.virtualenvs/airflow/bin/airflow webserver
+command={{ airflow_bin }}/airflow webserver
 socket=tcp://{{ loopback_adress }}:{{ airflow_port }}
 stopsignal=QUIT
 stopasgroup=true
@@ -7,7 +7,7 @@ autorestart=true
 environment=AIRFLOW_HOME="/home/{{ ansible_user }}/airflow",HOME="/home/{{ ansible_user }}",VIRTUAL_ENV="/home/{{ ansible_user }}/.virtualenvs/airflow",PATH="/home/{{ ansible_user }}/.virtualenvs/airflow/bin:$%(ENV_PATH)s"
 
 [program:{{ airflow_name }}-scheduler]
-command=/home/{{ ansible_user }}/.virtualenvs/airflow/bin/airflow scheduler
+command={{ airflow_bin }}/airflow scheduler
 stopsignal=QUIT
 stopasgroup=true
 killasgroup=true

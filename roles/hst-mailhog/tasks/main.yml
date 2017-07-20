@@ -17,4 +17,4 @@
     dest: "{{ supervisor_folder }}/conf.d/{{ mailhog_name }}.conf"
 
 - name: reload Supervisor config to launch Mailhog
-  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
+  command: "{{ supervisor_bin }}/supervisorctl update"

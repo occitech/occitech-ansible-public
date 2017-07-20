@@ -63,4 +63,4 @@
     dest: "{{ supervisor_folder }}/conf.d/{{ elastic_name }}.conf"
 
 - name: reload Supervisor config to launch ElasticSearch
-  command: /home/{{ ansible_user }}/python/builds/{{ python_version }}/bin/supervisorctl update
+  command: "{{ supervisor_bin }}/supervisorctl update"
