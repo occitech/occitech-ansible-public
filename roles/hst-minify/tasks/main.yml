@@ -1,0 +1,13 @@
+---
+- name: install minify
+#  unarchive:
+#    src: https://bin.equinox.io/c/dhgbqpS8Bvy/minify-stable-linux-amd64.tgz
+#    dest: ~/bin/
+#    validate_certs: no
+#    remote_src: True
+  shell: cd ~/bin; curl -L https://bin.equinox.io/c/dhgbqpS8Bvy/minify-stable-linux-amd64.tgz  | tar -xz
+
+- name: send minify automating scripts
+  template:
+    src:  minify_mage.j2
+    dest: "/home/{{ ansible_user }}/bin/minify_mage"
