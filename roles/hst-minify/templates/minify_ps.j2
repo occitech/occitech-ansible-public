@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    echo "Usage: script.sh /path/to/prestashop"
+    exit 1;
+fi
+
+ROOT_DIR=$1
+find /$1/themes/*/cache/ -name *.css -exec /home/{{ ansible_user }}/bin/minify -o '{}' '{}' \;
+find /$1/themes/*/cache/ -name *.js -exec /home/{{ ansible_user }}/bin/minify -o '{}' '{}' \;

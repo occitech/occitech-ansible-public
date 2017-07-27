@@ -9,5 +9,9 @@
 
 - name: send minify automating scripts
   template:
-    src:  minify_mage.j2
-    dest: "/home/{{ ansible_user }}/bin/minify_mage"
+    src:  "{{ item.src }}"
+    dest: "/home/{{ ansible_user }}/bin/{{ item.dest }}"
+    mode: 0555
+  with_items:
+    - { src: "minify_mage.j2",  dest: "minify_mage" }
+    - { src: "minify_ps.j2",  dest: "minify_ps" }
