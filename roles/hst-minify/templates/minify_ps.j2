@@ -9,10 +9,7 @@ fi
 
 ROOT_DIR=$1
 
-if [ -d $1/media/css_secure ]; then
+if [ -d $1/themes/*/cache ]; then
   find $1/themes/*/cache/ -name *.css -exec /home/{{ ansible_user }}/bin/minify -o '{}' '{}' \;
-fi
-
-if [ -d $1/media/css_secure ]; then
   find $1/themes/*/cache/ -name *.js -exec /home/{{ ansible_user }}/bin/minify -o '{}' '{}' \;
 fi

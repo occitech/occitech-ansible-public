@@ -16,6 +16,6 @@ if [ -d $1/media/css ]; then
   find $1/media/css -name *.css -exec /home/{{ ansible_user }}/bin/minify -o '{}' '{}' \;
 fi
 
-if [ -d $1/media/css ]; then
+if [ -d $1/media/js ]; then
   find $1/media/js -name *.js -exec /home/{{ ansible_user }}/bin/minify -o '{}' '{}' \;
 fi
