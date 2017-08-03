@@ -11,5 +11,6 @@ magento_admin_username: "{{ ansible_user }}"
 magento_admin_firstname: "{{ ansible_user }}"
 magento_admin_lastname: occitech.eu
 magento_admin_password: tobechang3d!
+magento_admin_frontname: "admin_{{ ansible_user }}"
 magento_admin_email: "{{ ansible_user }}@occitech.eu"
 magento_encryption_key: "{{ 9999999999999999999999 | random }}"

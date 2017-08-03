@@ -1,8 +1,12 @@
 # Magento 1
 
-Role to install a fresh Magento 1
+Role to install a fresh Magento 1, by default it use the following value (where <ACCOUNT> is your account hosting name):
+* url: http://<ACCOUNT>.occitech.eu
+* backoffice: http://<ACCOUNT>.occitech.eu/admin_<ACCOUNT>
+* admin user: <ACCOUNT>
+* admin pass: tobechang3d!
 
-**WARNING**: detination path and database will be erased during installation
+**WARNING**: destination path and database will be erased during installation
 
 * approximative size: 600MB
 
@@ -12,7 +16,6 @@ memory_limit=256M
 extension=zip.so
 extension=xsl.so
 extension=soap.so
-zend_extension=/usr/languages/php/5.5.30/lib/php/extensions/no-debug-non-zts-20121212/opcache.so
 opcache.enable=1
 opcache.memory_consumption = 128M
 opcache.interned_strings_buffer=16
