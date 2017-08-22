@@ -1,6 +1,6 @@
 ---
 - name: ensure all Supervisor working folders exist
-  file: path="{{ item }}" state=directory
+  file: path="{{ item }}" state=directory follow=yes
   with_items:
     - "{{ supervisor_folder }}/conf.d"
     - "{{ supervisor_folder }}/log"

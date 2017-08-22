@@ -1,3 +1,3 @@
 python_version: 2.7.12
-supervisor_version: 3.3.1
+supervisor_version: 3.3.3
 supervisor_folder: "/home/{{ ansible_user }}/supervisor/"
