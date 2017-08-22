@@ -1,5 +1,5 @@
 
-magento2_version: 2.1.5
+magento2_version: 2.1.8
 magento2_folder: /home/{{ ansible_user }}/magento2
 magento2_fqdn: "{{ ansible_user }}.occitech.eu"
 magento2_baseurl: "http://{{ magento2_fqdn }}"
