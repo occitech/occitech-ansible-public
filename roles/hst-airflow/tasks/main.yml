@@ -3,7 +3,7 @@
   file: path="{{ item }}" state=directory
   with_items:
     - "{{ airflow_folder }}"
-    - ~/airflow
+    - "/home/{{ ansible_user }}/{{ airflow_data_folder }}"
 
 - name: send Airflow config
   template:
