@@ -37,7 +37,7 @@
   when: airflow_local.stat.exists
 
 - name: install and init airflow
-  shell: source ~/.bash_profile; source {{ airflow_folder }}/bin/activate; {{ item }}
+  shell: chdir=/home/{{ ansible_user }}/{{ airflow_data_folder }} source ~/.bash_profile; source {{ airflow_folder }}/bin/activate; {{ item }}
   with_items:
     - pip install MySQL-python
     - pip install airflow=={{ airflow_version }}
@@ -47,6 +47,7 @@
      executable: /bin/bash
   environment:
     PATH: /home/{{ ansible_user }}/.local/bin:{{ ansible_env.PATH }}
+    AIRFLOW_HOME: /home/{{ ansible_user }}/{{ airflow_data_folder }}
 
 - name: send Supervisor config
   template:
