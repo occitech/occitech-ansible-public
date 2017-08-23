@@ -1,6 +1,7 @@
 python_version: 2.7.12
 airflow_name: airflow-{{ ansible_user }}
 airflow_version: 1.8.0
+airflow_data_folder: airflow
 airflow_folder: "/home/{{ ansible_user }}/.virtualenvs/airflow/"
 airflow_hostname: "{{ ansible_user }}.occitech.eu"
 airflow_port: 8088

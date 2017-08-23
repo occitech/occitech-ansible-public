@@ -8,7 +8,7 @@
 - name: send Airflow config
   template:
     src:  airflow.cfg.j2
-    dest: ~/airflow/airflow.cfg
+    dest: /home/{{ ansible_user }}/{{ airflow_data_folder }}/airflow.cfg
     force: no
 
 - name: check if virtualenv exist
