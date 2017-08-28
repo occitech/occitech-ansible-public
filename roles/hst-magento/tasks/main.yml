@@ -42,4 +42,4 @@
   template: src=n98-magerun.yaml.j2 dest=/home/{{ ansible_user }}/.n98-magerun.yaml
 
 - name: install Magento
-  shell: php -d memory_limit=1024M /home/{{ ansible_user }}/bin/n98-magerun install --magentoVersion=magento-ce-{{ magento_version }} --installationFolder={{ magento_folder }} --dbHost={{ magento_dbhost }} --dbUser={{ magento_dbuser }} --dbName={{ magento_dbname }} --dbPass={{ magento_dbpass }} --baseUrl={{ magento_baseurl }} --no-interaction
+  shell: php -d memory_limit=1024M /home/{{ ansible_user }}/bin/n98-magerun install --magentoVersion={{ magento_version }} --installationFolder={{ magento_folder }} --dbHost={{ magento_dbhost }} --dbUser={{ magento_dbuser }} --dbName={{ magento_dbname }} --dbPass={{ magento_dbpass }} --baseUrl={{ magento_baseurl }} --no-interaction
