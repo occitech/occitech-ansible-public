@@ -54,5 +54,5 @@
     src:  supervisor.conf.j2
     dest: "{{ supervisor_folder }}/conf.d/{{ airflow_name }}.conf"
 
-- name: reload Supervisor config to launch Redis
+- name: reload Supervisor config to launch Supervisor
   command: "{{ supervisor_bin }}/supervisorctl update"
