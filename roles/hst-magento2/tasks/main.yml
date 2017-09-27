@@ -57,7 +57,7 @@
   command: mysql --defaults-extra-file=~/.my_{{ magento2_dbname }}.cnf -e "drop database {{ magento2_dbname }}; create database {{ magento2_dbname }};"
 
 - name: deploy magento and modules
-  command: ~/bin/composer --ignore-platform-reqs create-project magento/community-edition:{{ magento2_version }} .
+  command: ~/bin/composer -n --ignore-platform-reqs create-project magento/community-edition:{{ magento2_version }} .
     chdir={{ magento2_folder }}
 
 - name: config composer environment
