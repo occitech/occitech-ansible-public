@@ -12,7 +12,7 @@
   when: (python_version_output.stderr != ("Python " + python_version)) and (python_version not in python_native_version)
 
 - name: compile Python if needed
-  include: compile.yml
+  include_tasks: compile.yml
   when: python_need_compilation
 
 - name: set Python version
