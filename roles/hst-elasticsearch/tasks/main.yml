@@ -5,11 +5,28 @@
     - log
     - data
 
+- name: be sure to remove previous install
+  file: path="{{ item }}" state=absent
+  with_items:
+    - "{{ elastic_folder }}/{{ elastic_name }}"
+    - "{{ supervisor_folder }}/conf.d/{{ elastic_name }}.conf"
+
+- name: reload Supervisor config to update ElasticSearch status
+  command: "{{ supervisor_bin }}/supervisorctl update"
+
 - name: define memory limit into env var
   lineinfile:
     create: yes
     dest: ~/.bash_profile
     line: export ES_HEAP_SIZE={{ elastic_memory }}
+
+- name: set up Java path for version < 5.0.0
+  set_fact: java_home="/usr/lib/jvm/java-7-openjdk-amd64/"
+  when: ( elastic_version < "5.0.0" )
+
+- name: set up Java path for version > 4.x
+  set_fact: java_home="/usr/lib/jvm/java-8-openjdk-amd64/"
+  when: not ( elastic_version < "5.0.0" )
 
 - name: download ElasticSearch for version < 5.0.0
   get_url:
@@ -32,30 +49,48 @@
 - name: move ElasticSearch folder to this final destination
   shell: cp -rTf {{ elastic_folder }}/elasticsearch-{{ elastic_version }} {{ elastic_folder }}/{{ elastic_name }} && rm -rf {{ elastic_folder }}/elasticsearch-{{ elastic_version }}
 
-- name: send ElasticSearch config
-  template:
-    src:  elasticsearch.yml.j2
-    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
-
 - name: check if ElasticFence plugin is installed for version < 5.0.0
   command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin list"
   register: es_plugin_list
+  when: ( elastic_version < "5.0.0" )
+  environment:
+    JAVA_HOME: "{{ java_home }}"
 
 - name: install ElasticFence plugin for version < 5.0.0
   command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
   when: ( elastic_version < "5.0.0" ) and ( "elasticfence" not in es_plugin_list.stdout )
+  environment:
+    JAVA_HOME: "{{ java_home }}"
 
-- name: install ElasticFence plugin for version > 4.x
+- name: install ElasticFence plugin for version > 4.x and < 5.6
   command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
-  when: not ( elastic_version < "5.0.0" )
+  when: not ( elastic_version < "5.0.0" ) and ( elastic_version < "5.1.3" )
+  environment:
+    JAVA_HOME: "{{ java_home }}"
 
-#- name: install X-Pack plugin for version > 5.1.3
-#  command: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}/bin/elasticsearch-plugin install https://raw.githubusercontent.com/elasticfence/elasticsearch-http-user-auth/{{ elastic_version }}/jar/elasticfence-{{ elastic_version }}-SNAPSHOT.zip"
-#  when: not ("{{ elastic_version }}" < "5.1.3")
+- name: install X-Pack plugin for version > 5.1.3
+  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-plugin install x-pack"
+  when: not ( elastic_version < "5.1.3")
+  environment:
+    JAVA_HOME: "{{ java_home }}"
 
 - name: install ElasticHead plugin for version < 5.0.0 (version > 4.x do not support site plugin)
   command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin install mobz/elasticsearch-head"
   when: ( elastic_version < "5.0.0" ) and ( "head" not in es_plugin_list.stdout )
+  environment:
+    JAVA_HOME: "{{ java_home }}"
+
+- name: send ElasticSearch config for ElasticFence
+  template:
+    src:  elasticsearch_elasticfence.yml.j2
+    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
+  when: ( elastic_version < "5.1.3" )
+
+- name: send Supervisor config for XPACK (version > 5.1.3)
+  template:
+    src:  elasticsearch_xpack.yml.j2
+    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
+  when: not ( elastic_version < "5.1.3")
 
 - name: send Supervisor config
   template:
@@ -64,3 +99,18 @@
 
 - name: reload Supervisor config to launch ElasticSearch
   command: "{{ supervisor_bin }}/supervisorctl update"
+
+- name: Wait 300 seconds max for ElasticSearch to be ready
+  wait_for:
+    host: "{{ loopback_adress }}"
+    port: "{{ elastic_port }}"
+    delay: 3
+  when: not ( elastic_version < "5.1.3")
+
+- name: configure X-Pack authentification (version > 5.1.3)
+  command: "curl -XPUT -u elastic:changeme '{{ loopback_adress }}:{{ elastic_port }}/_xpack/security/user/{{ item }}/_password' -H \"Content-Type: application/json\" -d '{\"password\" : \"{{ elastic_pass }}\"}'"
+  when: not ( elastic_version < "5.1.3")
+  with_items:
+    - elastic
+    - kibana
+    - logstash_system
