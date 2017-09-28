@@ -97,7 +97,7 @@ cluster.name: {{ elastic_name }}
 node.name: {{ elastic_name }}
 network.host: {{ loopback_adress }}
 http.port: {{ elastic_port }}
-path.data: /home/{{ ansible_user }}/elasticsearch/data
+path.data: /home/{{ ansible_user }}/elasticsearch/data/{{ elastic_name }}
 path.logs: /home/{{ ansible_user }}/elasticsearch/log
 
 xpack.security.audit.enabled: true
