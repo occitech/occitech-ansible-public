@@ -7,7 +7,7 @@ airflow_home = /home/{{ ansible_user }}/airflow
 dags_folder = /home/{{ ansible_user }}/{{ airflow_data_folder }}/dags
 # The folder where airflow should store its log files
 # This path must be absolute
-base_log_folder = /home/{{ ansible_user }}/{{ airflow_data_folder }}/logs
+base_log_folder = /home/{{ ansible_user }}/{{ airflow_log_folder }}/logs
 # Airflow can store logs remotely in AWS S3 or Google Cloud Storage. Users
 # must supply a remote location URL (starting with either 's3://...' or
 # 'gs://...') and an Airflow connection id that provides access to the storage

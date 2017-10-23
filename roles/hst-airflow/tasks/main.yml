@@ -4,6 +4,7 @@
   with_items:
     - "{{ airflow_folder }}"
     - "/home/{{ ansible_user }}/{{ airflow_data_folder }}"
+    - "/home/{{ ansible_user }}/{{ airflow_log_folder }}"
 
 - name: send Airflow config
   template:
