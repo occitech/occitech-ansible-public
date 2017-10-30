@@ -18,9 +18,14 @@
     repo: https://github.com/OiNutter/node-build.git
     dest: ~/.nodenv/plugins/node-build
 
-- name: install and set nodejs {{ node_version }} as default version
+- name: install nodejs
   command: chdir=~/ {{item}}
   with_items:
     - ~/.nodenv/bin/nodenv install -s {{ node_version }}
     - ~/.nodenv/bin/nodenv rehash
+
+- name: set nodejs {{ node_version }} as default version
+  command: chdir=~/ {{item}}
+  with_items:
     - ~/.nodenv/bin/nodenv global {{ node_version }}
+  when: node_default
