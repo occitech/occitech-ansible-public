@@ -1,6 +1,6 @@
 ---
 - name: ensure needed folders exist
-  file: path={{ elastic_folder }}/{{ item }} state=directory
+  file: path={{ elastic_folder }}/{{ item }} state=directory follow=yes
   with_items:
     - log
     - data

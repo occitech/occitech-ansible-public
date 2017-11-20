@@ -1,6 +1,6 @@
 ---
 - name: ensure all airflow folders exist
-  file: path="{{ item }}" state=directory
+  file: path="{{ item }}" state=directory follow=yes
   with_items:
     - "{{ airflow_folder }}"
     - "/home/{{ ansible_user }}/{{ airflow_data_folder }}"
