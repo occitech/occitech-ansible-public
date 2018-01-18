@@ -8,4 +8,5 @@ airflow_hostname: "{{ ansible_user }}.occitech.eu"
 airflow_port: 8088
 airflow_meso_port: 5050
 airflow_statsd_port: 8125
+airflow_webserver_env: AIRFLOW_HOME="/home/{{ ansible_user }}/{{ airflow_data_folder }}",HOME="/home/{{ ansible_user }}",VIRTUAL_ENV="/home/{{ ansible_user }}/.virtualenvs/airflow",PATH="/home/{{ ansible_user }}/.virtualenvs/airflow/bin:$%(ENV_PATH)s"
 airflow_scheduler_env: AIRFLOW_HOME="/home/{{ ansible_user }}/airflow",HOME="/home/{{ ansible_user }}",VIRTUAL_ENV="/home/{{ ansible_user }}/.virtualenvs/airflow",PATH="/home/{{ ansible_user }}/.virtualenvs/airflow/bin:$%(ENV_PATH)s"

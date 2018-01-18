@@ -4,7 +4,7 @@ socket=tcp://{{ loopback_adress }}:{{ airflow_port }}
 stopsignal=QUIT
 stopasgroup=true
 autorestart=true
-environment=AIRFLOW_HOME="/home/{{ ansible_user }}/{{ airflow_data_folder }}",HOME="/home/{{ ansible_user }}",VIRTUAL_ENV="/home/{{ ansible_user }}/.virtualenvs/airflow",PATH="/home/{{ ansible_user }}/.virtualenvs/airflow/bin:$%(ENV_PATH)s"
+environment={{ airflow_webserver_env }}
 
 [program:{{ airflow_name }}-scheduler]
 command={{ airflow_bin }}/airflow scheduler
