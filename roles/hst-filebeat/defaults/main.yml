@@ -1,0 +1,5 @@
+filebeat_name: filebeat
+filebeat_version: 6.2.2
+filebeat_folder: "/home/{{ ansible_user }}/filebeat"
+elastic_adress: "{{ loopback_adress }}"
+elastic_port: 9200
