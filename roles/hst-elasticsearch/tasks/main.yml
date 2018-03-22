@@ -14,12 +14,6 @@
 - name: reload Supervisor config to update ElasticSearch status
   command: "{{ supervisor_bin }}/supervisorctl update"
 
-- name: define memory limit into env var
-  lineinfile:
-    create: yes
-    dest: ~/.bash_profile
-    line: export ES_HEAP_SIZE={{ elastic_memory }}
-
 - name: set up Java path for version < 5.0.0
   set_fact: java_home="/usr/lib/jvm/java-7-openjdk-amd64/"
   when: ( elastic_version < "5.0.0" )
@@ -68,11 +62,11 @@
   environment:
     JAVA_HOME: "{{ java_home }}"
 
-- name: install X-Pack plugin for version > 5.1.3
-  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-plugin install x-pack"
-  when: not ( elastic_version < "5.1.3")
-  environment:
-    JAVA_HOME: "{{ java_home }}"
+#- name: install ReadOnlyRest Plugin for version > 5.1.3
+#  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-plugin install x-pack"
+#  when: not ( elastic_version < "5.1.3")
+#  environment:
+#    JAVA_HOME: "{{ java_home }}"
 
 - name: install ElasticHead plugin for version < 5.0.0 (version > 4.x do not support site plugin)
   command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin install mobz/elasticsearch-head"
@@ -86,16 +80,29 @@
     dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
   when: ( elastic_version < "5.1.3" )
 
-- name: send Supervisor config for XPACK (version > 5.1.3)
+#- name: send ElasticSearch config for ReadOnlyRest (version > 5.1.3)
+#  template:
+#    src:  elasticsearch_readonlyrest.yml.j2
+#    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
+#  when: not ( elastic_version < "5.1.3")
+
+- name: send noauth config for ElasticSearch (version > 5.1.3)
   template:
-    src:  elasticsearch_xpack.yml.j2
+    src:  elasticsearch_noauth.yml.j2
     dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
   when: not ( elastic_version < "5.1.3")
 
-- name: send Supervisor config
+- name: send Supervisor config for version < 5.0.0
   template:
     src:  elasticsearch.conf.j2
     dest: "{{ supervisor_folder }}/conf.d/{{ elastic_name }}.conf"
+  when: ( elastic_version < "5.0.0" )
+
+- name: send Supervisor config for version >= 5
+  template:
+    src:  elasticsearchv5.conf.j2
+    dest: "{{ supervisor_folder }}/conf.d/{{ elastic_name }}.conf"
+  when: not ( elastic_version < "5.0.0" )
 
 - name: reload Supervisor config to launch ElasticSearch
   command: "{{ supervisor_bin }}/supervisorctl update"
@@ -107,10 +114,10 @@
     delay: 3
   when: not ( elastic_version < "5.1.3")
 
-- name: configure X-Pack authentification (version > 5.1.3)
-  command: "curl -XPUT -u elastic:changeme '{{ loopback_adress }}:{{ elastic_port }}/_xpack/security/user/{{ item }}/_password' -H \"Content-Type: application/json\" -d '{\"password\" : \"{{ elastic_pass }}\"}'"
-  when: not ( elastic_version < "5.1.3")
-  with_items:
-    - elastic
-    - kibana
-    - logstash_system
+#- name: configure X-Pack authentification (version > 5.1.3)
+#  command: "curl -XPUT -u elastic:changeme '{{ loopback_adress }}:{{ elastic_port }}/_xpack/security/user/{{ item }}/_password' -H \"Content-Type: application/json\" -d '{\"password\" : \"{{ elastic_pass }}\"}'"
+#  when: not ( elastic_version < "5.1.3")
+#  with_items:
+#    - elastic
+#    - kibana
+#    - logstash_system

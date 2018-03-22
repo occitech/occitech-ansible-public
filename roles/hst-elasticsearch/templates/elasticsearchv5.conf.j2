@@ -7,4 +7,4 @@ startsecs=5
 stopwaitsecs=5
 stopasgroup=true
 killasgroup=true
-environment=JAVA_HOME="{{ java_home }}",ES_HEAP_SIZE="256m"
+environment=JAVA_HOME="{{ java_home }}",ES_JAVA_OPTS="-Xms256m -Xmx256m"
