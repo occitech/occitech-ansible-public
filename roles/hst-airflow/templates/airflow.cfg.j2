@@ -37,9 +37,11 @@ sql_alchemy_pool_recycle = 3600
 # The amount of parallelism as a setting to the executor. This defines
 # the max number of task instances that should run simultaneously
 # on this airflow installation
+# parallelism = 32
 parallelism = 32
 # The number of task instances allowed to run concurrently by the scheduler
-dag_concurrency = 16
+# dag_concurrency = 16
+dag_concurrency = 8
 # Are DAGs paused by default at creation
 dags_are_paused_at_creation = True
 # When not using pools, tasks are run in the "default pool",
@@ -115,7 +117,8 @@ worker_refresh_interval = 30
 # Secret key used to run your flask app
 secret_key = temporary_key
 # Number of workers to run the Gunicorn web server
-workers = 4
+# workers = 4
+workers = 1
 # The worker class gunicorn should use. Choices include
 # sync (default), eventlet, gevent
 worker_class = sync
