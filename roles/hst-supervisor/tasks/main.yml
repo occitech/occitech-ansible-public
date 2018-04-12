@@ -26,6 +26,7 @@
   file:
     src: "{{ supervisor_folder }}/supervisord.conf"
     dest: /home/{{ ansible_user }}/.local/etc/supervisord.conf
+    state: link
 
 - name: register supervisor bin path
   set_fact:
