@@ -5,7 +5,7 @@
 #    dest: ~/bin/
 #    validate_certs: no
 #    remote_src: True
-  shell: cd ~/bin; curl -L https://bin.equinox.io/c/dhgbqpS8Bvy/minify-stable-linux-amd64.tgz  | tar -xz
+  shell: cd ~/bin; curl -L https://github.com/tdewolff/minify/releases/download/v2.3.4/minify_2.3.4_linux_amd64.tar.gz  | tar -xz
 
 - name: send minify automating scripts
   template:
