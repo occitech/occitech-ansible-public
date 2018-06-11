@@ -1,0 +1,34 @@
+---
+
+# git clone https://github.com/odoo/odoo.git --branch 8.0 --depth=1  ~/dev
+
+- name: checkout Odoo source
+  git:
+    repo: https://github.com/odoo/odoo.git
+    dest: "{{ odoo_folder }}/src"
+    depth: 1
+    version: "{{ odoo_version }}"
+
+
+
+# cd ~dev && pip install -r requirements.txt  && npm install -g less
+
+- name: install odoo requirements
+  shell: chdir="{{ odoo_folder }}/src" {{ item }}
+  with_items:
+    - pip install -r requirements.txt
+    - npm install -g less
+  args:
+     executable: /bin/bash
+  environment:
+    PYTHON_VERSION: "{{ python_version }}"
+
+# sed odoo-bin 's/\/usr\/bin\/env python3//'
+
+- name: install odoo requirements
+  shell: chdir="{{ odoo_folder }}/src" sed 's/\/usr\/bin\/env python3/\/usr\/bin\/env python/g;w odoo-run' odoo-bin
+
+- name: fix executable permission
+  file:
+    path: "{{ odoo_folder }}/src/odoo-run"
+    mode: 0755
