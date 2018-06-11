@@ -1,6 +1,7 @@
-magento_version: magento-mirror-1.9.3.7
+magento_version: magento-mirror-1.9.3.8
 magento_folder: /home/{{ ansible_user }}/magento
-magento_baseurl: "http://{{ ansible_user }}.occitech.eu"
+magento_fqdn: "{{ ansible_user }}.occitech.eu"
+magento_baseurl: "http://{{ magento_fqdn }}"
 magento_dbhost: mysql-{{ ansible_user }}.occitech.eu
 magento_currency: EUR
 magento_locale: fr_FR
