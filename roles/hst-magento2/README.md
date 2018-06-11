@@ -17,3 +17,8 @@ opcache.interned_strings_buffer=16
 opcache.max_accelerated_files=100000
 opcache.fast_shutdown=1
 ```
+
+And add this line to your site **Advanced Settings**
+```
+LoadModule version_module /usr/alwaysdata/apache/2.2.32/modules/mod_version.so
+```
