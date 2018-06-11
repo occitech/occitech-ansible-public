@@ -1,6 +1,6 @@
 wordpress_folder: "/home/{{ ansible_user }}/wordpress/"
 wordpress_locale: "fr_FR"
-wordpress_dbhost: "127.0.0.1"
+wordpress_dbhost: "mysql-{{ ansible_user }}.occitech.eu"
 wordpress_url: "{{ ansible_user }}.occitech.eu"
 wordpress_title: "WordPress Demo"
 wordpress_user: "{{ ansible_user }}"
