@@ -21,3 +21,5 @@ You could use the following telnet command to get access to your Memcached serve
 ```
 telnet $LOCALSERVER 11212
 ```
+
+WARNING: be sure to use compatible version (example: you can't use memcached_php_version > 3 when your environment is configured for php < 7)
