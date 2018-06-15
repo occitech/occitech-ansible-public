@@ -12,7 +12,7 @@
     version: "{{ supervisor_version }}"
   environment:
     PATH: "{{ ansible_env.PATH }}"
-    PYTHON_VERSION: "2.7.12"
+    PYTHON_VERSION: "{{ python_version }}"
 
 - name: send Supervisor configuration file
   template:
