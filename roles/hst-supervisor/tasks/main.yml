@@ -46,3 +46,10 @@
     name: launch Supervisor
     special_time: reboot
     job: "{{ supervisor_bin }}/supervisord"
+
+- name: ensure Supervisor stay alive
+  cron:
+    name: relaunch Supervisor if it's missing
+    minute: "*"
+    hour: "*"
+    job: "pgrep supervisord > /dev/null || {{ supervisor_bin }}/supervisord"
