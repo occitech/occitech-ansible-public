@@ -3,4 +3,4 @@
   get_url:
     url: https://getcomposer.org/download/{{ composer_version }}/composer.phar
     dest: ~/bin/composer
-    mode: 0555
+    mode: 0755
