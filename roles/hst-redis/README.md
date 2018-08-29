@@ -18,5 +18,10 @@ extension = /home/<YOUR_ACCOUNT_NAME>/redis.so
 
 You could use the following telnet command to get access to your Redis server
 ```
-telnet $LOCALSERVER 11212
+telnet $LOCALSERVER 6379
+```
+
+Or use the Redis CLI
+```
+redis-cli -h $LOCALSERVER -p 6379
 ```
