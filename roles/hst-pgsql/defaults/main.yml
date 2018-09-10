@@ -1,5 +1,5 @@
 pgsql_name: pgsql
-pgsql_version: 9.6.9-1
+pgsql_version: 9.6.10-2
 pgsql_port: 5434
-pgsq_base_folder: /home/{{ ansible_user }}/
+pgsq_base_folder: /home/{{ ansible_user }}
 pgsql_folder: "{{ pgsq_base_folder }}/pgsql"
