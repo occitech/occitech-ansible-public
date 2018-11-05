@@ -1,0 +1,42 @@
+---
+- name: ensure folder exist
+  file: path="{{ nextcloud_folder }}" state=directory
+
+- pause:
+    prompt: "Enter database name, press (ctrl+c) and then (c) after:"
+  register: prompt_dbname
+  when: nextcloud_dbname is not defined
+
+- set_fact:
+    nextcloud_dbname: "{{ prompt_dbname.user_input }}"
+  when: nextcloud_dbname is not defined
+
+- pause:
+    prompt: "Enter database user, press (ctrl+c) and then (c) after:"
+  register: prompt_dbuser
+  when: nextcloud_dbuser is not defined
+
+- set_fact:
+    nextcloud_dbuser: "{{ prompt_dbuser.user_input }}"
+  when: nextcloud_dbuser is not defined
+
+- pause:
+    prompt: "Enter database pass, press (ctrl+c) and then (c) after:"
+  register: prompt_dbpass
+  when: nextcloud_dbpass is not defined
+
+- set_fact:
+    nextcloud_dbpass: "{{ prompt_dbpass.user_input }}"
+  when: nextcloud_dbpass is not defined
+
+- name: download and extract NextCloud
+  unarchive:
+    src: https://download.nextcloud.com/server/releases/nextcloud-{{ nextcloud_version }}.zip
+    dest: "{{ nextcloud_folder }}"
+    remote_src: True
+
+- name: install NextCloud
+  command: chdir="{{ nextcloud_folder }}/nextcloud" php occ maintenance:install --database "mysql" --database-host "{{ nextcloud_dbhost }}" --database-name "{{ nextcloud_dbname }}"  --database-user "{{ nextcloud_dbname }}" --database-pass "{{ nextcloud_dbpass }}" --admin-user "{{ nextcloud_user }}" --admin-pass "{{ nextcloud_admin_pass }}"
+
+- name: configure NextCloud domain
+  command: chdir="{{ nextcloud_folder }}/nextcloud" php occ config:system:set trusted_domains 0 --value={{ nextcloud_url }}

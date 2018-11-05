@@ -1,0 +1,6 @@
+nextcloud_version: "14.0.3"
+nextcloud_folder: "/home/{{ ansible_user }}"
+nextcloud_dbhost: "mysql-{{ ansible_user }}.occitech.eu"
+nextcloud_user: "{{ ansible_user }}"
+nextcloud_admin_pass: "tobechang3d!"
+nextcloud_url: "{{ ansible_user }}.occitech.eu"
