@@ -74,6 +74,7 @@
 - name: deploy sample data
   command: bin/magento {{ item }}
     chdir={{ magento2_folder }}
+  retries: 3
   with_items:
     - "sampledata:deploy"
     - "setup:upgrade"
