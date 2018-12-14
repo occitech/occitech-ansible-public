@@ -1,4 +1,4 @@
 ---
 dependencies:
   - { role: hst-bin }
-  - { role: hst-python, python_version: 2.7.12 }
+  - { role: hst-python, python_version: 2.7.15 }
