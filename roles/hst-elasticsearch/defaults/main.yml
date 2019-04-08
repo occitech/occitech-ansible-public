@@ -4,3 +4,4 @@ elastic_folder: "/home/{{ ansible_user }}/elasticsearch"
 elastic_port: 9200
 elastic_memory: 256m
 elastic_pass: ToBeChanged
+elastic_tmpdir: "/home/{{ ansible_user }}/admin/tmp"

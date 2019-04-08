@@ -7,4 +7,4 @@ startsecs=5
 stopwaitsecs=5
 stopasgroup=true
 killasgroup=true
-environment=JAVA_HOME="{{ java_home }}",ES_JAVA_OPTS="-Xms{{ elastic_memory }} -Xmx{{ elastic_memory }}",ES_HEAP_SIZE=""
+environment=_JAVA_OPTIONS="-Djava.io.tmpdir={{ elastic_tmpdir }} -XX:-UsePerfData",JAVA_HOME="{{ java_home }}",ES_JAVA_OPTS="-Xms{{ elastic_memory }} -Xmx{{ elastic_memory }}",ES_HEAP_SIZE="",ES_TMPDIR="{{ elastic_tmpdir }}"
