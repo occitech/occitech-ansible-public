@@ -99,3 +99,6 @@ network.host: {{ loopback_adress }}
 http.port: {{ elastic_port }}
 path.data: /home/{{ ansible_user }}/elasticsearch/data/{{ elastic_name }}
 path.logs: /home/{{ ansible_user }}/elasticsearch/log
+
+xpack.security.enabled: false
+xpack.monitoring.enabled: false
