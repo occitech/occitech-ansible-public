@@ -100,5 +100,8 @@ http.port: {{ elastic_port }}
 path.data: /home/{{ ansible_user }}/elasticsearch/data/{{ elastic_name }}
 path.logs: /home/{{ ansible_user }}/elasticsearch/log
 
-xpack.security.audit.enabled: true
+xpack.graph.enabled: false
+xpack.ml.enabled: false
 xpack.monitoring.enabled: false
+xpack.security.enabled: true
+xpack.watcher.enabled: false

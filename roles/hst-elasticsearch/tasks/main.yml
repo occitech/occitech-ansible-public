@@ -86,11 +86,17 @@
 #    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
 #  when: not ( elastic_version < "5.1.3")
 
-- name: send noauth config for ElasticSearch (version > 5.1.3)
+- name: send noauth config for ElasticSearch ( 6.3.0 > version > 5.1.3)
   template:
     src:  elasticsearch_noauth.yml.j2
     dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
-  when: not ( elastic_version < "5.1.3")
+  when: elastic_version > "5.1.3" and elastic_version < "6.3.0"
+
+- name: send noauth config and disable x-pack feature for ElasticSearch (version > 6.3.0)
+  template:
+    src:  elasticsearch_noauth_noxpack.yml.j2
+    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
+  when: not ( elastic_version < "6.3.0")
 
 - name: send Supervisor config for version < 5.0.0
   template:
