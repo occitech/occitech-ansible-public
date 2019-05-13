@@ -1,4 +1,4 @@
-python_version: 2.7.15
+python_version: 2.7.16
 airflow_name: airflow-{{ ansible_user }}
 airflow_version: 1.10.0
 airflow_data_folder: airflow

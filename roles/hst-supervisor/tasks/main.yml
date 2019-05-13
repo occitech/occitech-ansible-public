@@ -10,6 +10,7 @@
   pip:
     name: supervisor
     version: "{{ supervisor_version }}"
+    executable: pip
   environment:
     PATH: "{{ ansible_env.PATH }}"
     PYTHON_VERSION: "{{ python_version }}"
