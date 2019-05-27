@@ -13,7 +13,7 @@
 
 - name: compile Python if needed
   include_tasks: compile.yml
-  when: python_need_compilation
+  when: python_need_compilation|bool
 
 - name: set Python version
   lineinfile:
