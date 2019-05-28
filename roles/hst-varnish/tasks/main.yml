@@ -1,0 +1,25 @@
+---
+
+- name: ensure all needed folders exist
+  file: path="{{ varnish_folder }}/{{ item }}" state=directory
+  with_items:
+    - src
+    - workdir
+
+- name: get Varnish source
+  unarchive:
+    src: https://github.com/varnishcache/varnish-cache/archive/varnish-{{ varnish_version }}.tar.gz
+    dest: "{{ varnish_folder }}/src"
+    remote_src: yes
+
+- name: compile and install Varnish
+  shell: "{{ item }}"
+  with_items:
+    - "./autogen.sh"
+    - "./configure --prefix={{ varnish_folder }}"
+    - "make"
+    - "make install"
+  args:
+    chdir: "{{ varnish_folder }}/src/varnish-cache-varnish-{{ varnish_version }}"
+  environment:
+    PYTHON_VERSION: "{{ python_version }}"
