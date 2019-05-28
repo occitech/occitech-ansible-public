@@ -1,0 +1,2 @@
+sphinx_version: "2.2.11"
+sphinx_folder: "/home/{{ ansible_user }}/sphinx"
