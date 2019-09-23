@@ -3,4 +3,3 @@ dependencies:
   - { role: hst-bin }
   - { role: hst-loopback }
   - { role: hst-supervisor }
-  - { role: hst-elasticsearch }
