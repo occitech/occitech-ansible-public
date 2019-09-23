@@ -32,7 +32,13 @@
   get_url:
     url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.tar.gz
     dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
-  when: not ( elastic_version < "5.0.0" )
+  when: (not ( elastic_version < "5.0.0" )) and ( elastic_version < "7.0.0" )
+
+- name: download ElasticSearch for version > 7.x
+  get_url:
+    url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elastic_version }}-linux-x86_64.tar.gz
+    dest: "{{ elastic_folder }}/elasticsearch-{{ elastic_version }}.tar.gz"
+  when: not ( elastic_version < "7.0.0" )
 
 - name: extract ElasticSearch
   unarchive:
@@ -96,7 +102,13 @@
   template:
     src:  elasticsearch_noauth_noxpack.yml.j2
     dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
-  when: not ( elastic_version < "6.3.0")
+  when: (not ( elastic_version < "6.3.0" )) and ( elastic_version < "7.0.0" )
+
+- name: send noauth config and disable x-pack feature for ElasticSearch (version > 6.3.0)
+  template:
+    src:  elasticsearch_noauth_noxpack.v7.yml.j2
+    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
+  when: not ( elastic_version < "7.0.0")
 
 - name: send Supervisor config for version < 5.0.0
   template:
