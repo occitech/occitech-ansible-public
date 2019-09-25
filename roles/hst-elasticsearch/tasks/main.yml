@@ -68,12 +68,6 @@
   environment:
     JAVA_HOME: "{{ java_home }}"
 
-#- name: install ReadOnlyRest Plugin for version > 5.1.3
-#  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-plugin install x-pack"
-#  when: not ( elastic_version < "5.1.3")
-#  environment:
-#    JAVA_HOME: "{{ java_home }}"
-
 - name: install ElasticHead plugin for version < 5.0.0 (version > 4.x do not support site plugin)
   command: "{{ elastic_folder }}/{{ elastic_name }}/bin/plugin install mobz/elasticsearch-head"
   when: ( elastic_version < "5.0.0" ) and ( "head" not in es_plugin_list.stdout )
@@ -85,12 +79,6 @@
     src:  elasticsearch_elasticfence.yml.j2
     dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
   when: ( elastic_version < "5.1.3" )
-
-#- name: send ElasticSearch config for ReadOnlyRest (version > 5.1.3)
-#  template:
-#    src:  elasticsearch_readonlyrest.yml.j2
-#    dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
-#  when: not ( elastic_version < "5.1.3")
 
 - name: send noauth config for ElasticSearch ( 6.3.0 > version > 5.1.3)
   template:
@@ -106,7 +94,7 @@
 
 - name: send noauth config and disable x-pack feature for ElasticSearch (version > 6.3.0)
   template:
-    src:  elasticsearch_noauth_noxpack.v7.yml.j2
+    src:  elasticsearch_v7.yml.j2
     dest: "{{ elastic_folder }}/{{ elastic_name }}/config/elasticsearch.yml"
   when: not ( elastic_version < "7.0.0")
 
@@ -132,10 +120,8 @@
     delay: 3
   when: not ( elastic_version < "5.1.3")
 
-#- name: configure X-Pack authentification (version > 5.1.3)
-#  command: "curl -XPUT -u elastic:changeme '{{ loopback_adress }}:{{ elastic_port }}/_xpack/security/user/{{ item }}/_password' -H \"Content-Type: application/json\" -d '{\"password\" : \"{{ elastic_pass }}\"}'"
-#  when: not ( elastic_version < "5.1.3")
-#  with_items:
-#    - elastic
-#    - kibana
-#    - logstash_system
+- name: Create superuser (user x-pack.security version > 6.3.0)
+  command: "{{ elastic_folder }}/{{ elastic_name }}/bin/elasticsearch-users useradd -roles superuser -p {{ elastic_pass }} {{ elastic_user }}"
+  environment:
+    PATH: "{{ java_home }}/bin:/home/{{ ansible_user }}/bin/:/home/{{ ansible_user }}/.local/bin:/usr/local/bin:/usr/bin:/bin"
+  when: not ( elastic_version < "7.0.0")
