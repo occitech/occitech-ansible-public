@@ -23,7 +23,7 @@ elasticsearch.host: http://{{ loopback_adress }}:{{ elastic_port }}
 #
 # Elasticsearch credentials:
 #
-elasticsearch.username: elastic
+elasticsearch.username: {{ elastic_user }}
 elasticsearch.password: {{ elastic_pass }}
 #
 # Elasticsearch SSL settings:
@@ -76,7 +76,7 @@ app_search.monitoring_port: {{ appsearch_monit_port }}
 # * elasticsearch-native: Users are managed via the Elasticsearch native realm.
 # * elasticsearch-saml: Users are managed via the Elasticsearch SAML realm.
 #
-#app_search.auth.source: standard
+app_search.auth.source: elasticsearch-native
 #
 # (SAML only) Name of the realm within the Elasticsearch realm chain.
 #
@@ -87,14 +87,14 @@ app_search.monitoring_port: {{ appsearch_monit_port }}
 # Connect App Search to a mailer.
 # Docs: https://swiftype.com/documentation/app-search/self-managed/configuration
 #
-#email.account.enabled: false
+#email.account.enabled: true
 #email.account.smtp.auth: plain
 #email.account.smtp.starttls.enable: false
 #email.account.smtp.host: 127.0.0.1
 #email.account.smtp.port: 25
 #email.account.smtp.user:
 #email.account.smtp.password:
-#email.account.email_defaults.from:
+#email.account.email_defaults.from: {{ ansible_user }}@occitech.eu
 #
 # ----------------------------------- APIs ------------------------------------
 #

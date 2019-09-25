@@ -1,10 +1,10 @@
 ---
 - name: ensure needed folders exist
-  file: path={{ appsearch_folder }}/{{ item }} state=directory follow=yes
-  with_items:
-    - log
-    - data
-
+  file:
+    path: "{{ appsearch_folder }}"
+    state: "directory"
+    follow: "yes"
+  
 - name: set up Java path for version > 4.x
   set_fact: java_home="/usr/lib/jvm/java-8-openjdk-amd64/"
   when: not ( appsearch_version < "5.0.0" )

@@ -1,12 +1,12 @@
-appsearch_name: appsearch
-appsearch_version: 7.3.2
+appsearch_name: "appsearch"
+appsearch_version: "7.3.2"
 appsearch_folder: "/home/{{ ansible_user }}/appsearch"
-appsearch_port: 3002
-elastic_port: 9200
-appsearch_monit_port: 3003
-appsearch_fqdn: appsearch.example.com
-appsearch_memory: 512m
-java_home: /usr/lib/jvm/java-8-openjdk-amd64/
-
-appsearch_pass: ToBeChanged
+appsearch_port: "3002"
 appsearch_tmpdir: "/home/{{ ansible_user }}/admin/tmp"
+appsearch_monit_port: "3003"
+appsearch_fqdn: "appsearch.example.com"
+appsearch_memory: "512m"
+elastic_port: "9200"
+elastic_user: "{{ ansible_user }}"
+elastic_pass: "ToBeChanged"
+java_home: "/usr/lib/jvm/java-8-openjdk-amd64/"
