@@ -1,7 +1,0 @@
----
-- name: install n98 magerun
-  get_url:
-    url: https://files.magerun.net/n98-magerun2.phar
-    validate_certs: no
-    dest: ~/bin/n98-magerun2
-    mode: 0755

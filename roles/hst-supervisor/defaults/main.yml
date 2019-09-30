@@ -1,3 +1,0 @@
-python_version: 3.7.2
-supervisor_version: 4.0.2
-supervisor_folder: "/home/{{ ansible_user }}/supervisor"

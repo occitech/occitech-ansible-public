@@ -1,6 +1,0 @@
----
-- name: install Drush
-  get_url:
-    url: https://github.com/drush-ops/drush/releases/download/{{ drush_version }}/drush.phar
-    dest: ~/bin/drush
-    mode: 0555

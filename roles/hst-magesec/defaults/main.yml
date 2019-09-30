@@ -1,3 +1,0 @@
-python_version: 2.7.16
-magesec_folder: "/home/{{ ansible_user }}/.virtualenvs/magesec/"
-magesec_mail: hebergement@occitech.fr

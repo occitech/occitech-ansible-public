@@ -1,5 +1,0 @@
----
-- name: Install passlib
-  pip: name=passlib state=latest
-  environment:
-    PYTHON_VERSION: "{{ python_version }}"

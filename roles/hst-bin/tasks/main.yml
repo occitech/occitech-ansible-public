@@ -1,9 +1,0 @@
----
-- name: ensure local binary folder exist
-  file: path=~/bin state=directory
-
-- name: add local binary folder to env PATH
-  lineinfile:
-    create: yes
-    dest: ~/.bash_profile
-    line: export PATH=~/bin/:$PATH

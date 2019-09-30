@@ -1,8 +1,0 @@
-elastic_name: "elasticsearch"
-elastic_version: "7.3.2"
-elastic_folder: "/home/{{ ansible_user }}/elasticsearch"
-elastic_port: "9200"
-elastic_memory: "512m"
-elastic_user: "{{ ansible_user }}"
-elastic_pass: "ToBeChanged"
-elastic_tmpdir: "/home/{{ ansible_user }}/admin/tmp"

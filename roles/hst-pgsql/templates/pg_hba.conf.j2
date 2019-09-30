@@ -1,7 +1,0 @@
-# Accept from local user postgres
-local	all	{{ ansible_user }}		ident
-
-# Accept anyone from anywhere provided they supply a correct username/password
-local	all     all			md5
-host    all     all     127.0.0.1/0     md5
-host    all     all     ::1/0           md5

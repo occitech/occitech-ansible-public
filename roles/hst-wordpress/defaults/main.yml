@@ -1,8 +1,0 @@
-wordpress_folder: "/home/{{ ansible_user }}/wordpress/"
-wordpress_locale: "fr_FR"
-wordpress_dbhost: "mysql-{{ ansible_user }}.occitech.eu"
-wordpress_url: "{{ ansible_user }}.occitech.eu"
-wordpress_title: "WordPress Demo"
-wordpress_user: "{{ ansible_user }}"
-wordpress_admin_pass: "tobechang3d!"
-wordpress_admin_mail: "{{ ansible_user }}@occitech.eu"

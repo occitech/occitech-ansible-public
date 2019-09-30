@@ -1,9 +1,0 @@
-[program:{{ memcached_name }}]
-command={{ memcached_folder }}/src/memcached-{{ memcached_version }}/memcached -l {{ loopback_adress }} -p {{ memcached_port }} -m {{ memcached_memory }} -P {{ memcached_folder }}/run/{{ memcached_name }} -t 8
-socket=tcp://{{ loopback_adress }}:{{ memcached_port }}
-autostart=true
-autorestart=true
-startsecs=5
-stopwaitsecs=5
-stopasgroup=true
-killasgroup=true

@@ -1,9 +1,0 @@
----
-- name: install ocp
-  unarchive:
-    src: https://cdn.pmylund.com/files/tools/ocp2/linux/ocp-2.7-amd64.tar.gz
-    extra_opts: [--strip-components=1]
-    dest: ~/bin/
-    exclude: ["ocp/example-sitemap.xml","ocp/LICENSE"]
-    mode: 0755
-    remote_src: yes

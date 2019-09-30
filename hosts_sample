@@ -1,4 +1,0 @@
-[myOccitech-hosting]
-<occitech_account> ansible_host=<occitech_ssh_server> ansible_user=<occitech_ssh_userr>
-myOccitech-WordPress ansible_host=mywordpress.occitech.eu ansible_user=mywordpress
-myOccitech-Redmine ansible_host=myredmine.occitech.eu ansible_user=myredmine

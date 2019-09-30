@@ -1,4 +1,0 @@
-python_version: 3.6.5
-odoo_version: 11.0
-odoo_folder: /home/{{ ansible_user }}/odoo
-odoo_dbhost: postgresql-{{ ansible_user }}.occitech.eu

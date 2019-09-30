@@ -1,9 +1,0 @@
-[program:{{ mailhog_name }}]
-command=/home/{{ ansible_user }}/bin/mailhog -hostname {{ mailhog_hostname }} -smtp-bind-addr {{ loopback_adress }}:{{ mailhog_smtp_sock }} -ui-bind-addr {{ loopback_adress }}:{{ mailhog_ui_sock }} -api-bind-addr {{ loopback_adress }}:{{ mailhog_api_sock }}
-socket=tcp://{{ loopback_adress }}:{{ mailhog_smtp_sock }}
-autostart=true
-autorestart=true
-startsecs=5
-stopwaitsecs=5
-stopasgroup=true
-killasgroup=true
